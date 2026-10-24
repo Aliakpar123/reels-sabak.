@@ -146,7 +146,7 @@
   .expired b{font-size:20px}
   .expired span{opacity:.75;font-size:15px}
   body.is-expired .expired{display:flex}
-  body.is-expired .poster,body.is-expired .video iframe,body.is-expired .lessons,body.is-expired .player-nav,body.is-expired .list-title,body.is-expired .steps{display:none!important}
+  body.is-expired .poster,body.is-expired .video iframe,body.is-expired .lessons,body.is-expired .player-nav,body.is-expired .list-head,body.is-expired .steps{display:none!important}
 
   /* список сабақтар */
   .lessons{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;text-align:left}
@@ -162,7 +162,7 @@
   .lesson.active{border-color:var(--brand);box-shadow:0 0 0 4px var(--ring)}
   .lesson.active .n{color:var(--brand)}
   .lesson.active .th::before{
-    content:"Қазір";position:absolute;left:6px;top:6px;z-index:1;padding:2px 8px;border-radius:6px;
+    content:"Қазір";position:absolute;left:6px;top:6px;z-index:3;padding:2px 8px;border-radius:6px;
     background:var(--brand);color:#fff;font-size:11px;font-weight:700;
   }
   @media (max-width:640px){.lessons{grid-template-columns:repeat(3,1fr)}}
@@ -188,7 +188,24 @@
   .now .bar{width:100%;max-width:200px;height:6px;border-radius:99px;background:#e3e6ff;overflow:hidden}
   .now .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand-3));transition:width .4s}
 
-  .list-title{margin-top:36px;font-size:20px;font-weight:800;letter-spacing:-.01em;text-align:left}
+  .list-head{margin-top:36px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
+  .list-title{font-size:20px;font-weight:800;letter-spacing:-.01em;text-align:left}
+  .list-note{font-size:13px;font-weight:700;color:var(--muted)}
+
+  /* жабық сабақтар */
+  .lesson.locked .th{filter:saturate(.6)}
+  .lesson.locked .th::after{background:rgba(11,13,31,.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  .lesson .lk{position:absolute;inset:0;margin:auto;z-index:2;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.95);color:var(--brand);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+  .lesson.locked .n{color:var(--muted)}
+  .locked-panel{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;text-align:center;color:#fff;background:#1a1d3a center/cover no-repeat}
+  .locked-panel[hidden]{display:none}
+  .locked-panel::before{content:"";position:absolute;inset:0;background:rgba(11,13,31,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .locked-panel > *{position:relative}
+  .lock-big{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.95);color:var(--brand);margin-bottom:4px}
+  .locked-panel b{font-size:20px}
+  .locked-panel span{font-size:14px;opacity:.85}
+  .unlock-btn{margin-top:8px;padding:11px 20px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:800;font-size:15px;text-decoration:none}
+  @media (max-width:520px){.lock-big{width:48px;height:48px}.locked-panel b{font-size:17px}.locked-panel span{font-size:13px}}
   .lesson.done .th::before{
     content:"✓ Көрілді";position:absolute;left:6px;top:6px;z-index:1;padding:2px 8px;border-radius:6px;
     background:#10b981;color:#fff;font-size:11px;font-weight:700;
@@ -283,6 +300,12 @@
         <span class="play"><svg width="30" height="30" viewBox="0 0 24 24" fill="#4f46e5" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
         <span class="duration" id="now-label">1-сабақ</span>
       </button>
+      <div class="locked-panel" id="locked-panel" hidden>
+        <span class="lock-big"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+        <b>Бұл сабақ жабық</b>
+        <span id="locked-text">Барлық сабақтарды ашу үшін авторға жаз</span>
+        <a class="unlock-btn" id="unlock-btn" href="#" target="_blank" rel="noopener">Сабақтарды ашу</a>
+      </div>
       <div class="expired">
         <b>Сабақтарға қолжетімділік жабылды</b>
         <span>Жазбаны алу үшін авторға жаз</span>
@@ -300,7 +323,7 @@
     <button type="button" class="nav-btn next" id="next" aria-label="Келесі сабақ">Келесі →</button>
   </div>
 
-  <h2 class="list-title reveal" style="animation-delay:.35s">Барлық сабақтар</h2>
+  <div class="list-head reveal" style="animation-delay:.35s"><h2 class="list-title">Барлық сабақтар</h2><span class="list-note" id="list-note"></span></div>
   <div class="lessons reveal" id="lessons" style="animation-delay:.36s"></div>
 
   <p class="lead reveal" style="animation-delay:.4s">
@@ -346,6 +369,7 @@ const CONFIG = {
     { title: '14-сабақ', youtubeId: 'LnctOrIUU1o' },
     { title: '15-сабақ', youtubeId: 'WesL4kmI4Jw' },
   ],
+  freeLessons: 1,                       // сколько первых уроков открыты бесплатно, остальные с замком
   accessHours: 24,                      // сколько часов доступен урок с первого визита
   copyright: '© 2026 Атауы · ЖК Тегі А. Ә.'
 };
@@ -355,6 +379,8 @@ const $ = id => document.getElementById(id);
 $('cta-text').textContent = CONFIG.ctaText;
 $('cta').href = CONFIG.contactUrl;
 $('copyright').textContent = CONFIG.copyright;
+$('unlock-btn').href = CONFIG.contactUrl;
+const isLocked = i => i >= CONFIG.freeLessons;
 
 const box = $('video'), poster = $('poster'), list = $('lessons');
 const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
@@ -377,7 +403,10 @@ function select(i, play) {
   current = i;
   const l = CONFIG.lessons[i];
   box.querySelectorAll('iframe').forEach(f => f.remove());
-  poster.style.display = '';
+  const locked = isLocked(i);
+  $('locked-panel').hidden = !locked;
+  $('locked-panel').style.backgroundImage = `url("${thumb(l.youtubeId)}")`;
+  poster.style.display = locked ? 'none' : '';
   poster.style.backgroundImage = `url("${thumb(l.youtubeId)}")`;
   $('now-label').textContent = l.title;
   $('now-title').textContent = l.title;
@@ -385,10 +414,11 @@ function select(i, play) {
   $('next').disabled = i === CONFIG.lessons.length - 1;
   [...list.children].forEach((el, j) => el.classList.toggle('active', j === i));
   renderProgress();
-  if (play) startVideo();
+  if (play && !locked) startVideo();
 }
 
 function startVideo() {
+  if (isLocked(current)) return;
   const f = document.createElement('iframe');
   f.src = `https://www.youtube-nocookie.com/embed/${CONFIG.lessons[current].youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
   f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
@@ -402,8 +432,8 @@ function startVideo() {
 
 CONFIG.lessons.forEach((l, i) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'lesson';
-  b.innerHTML = `<span class="th" style="background-image:url('${thumb(l.youtubeId)}')"><span class="pl"><svg width="12" height="12" viewBox="0 0 24 24" fill="#4f46e5"><path d="M7 4v16l13-8z"/></svg></span></span><span class="n">${l.title}</span>`;
+  b.type = 'button'; b.className = 'lesson' + (isLocked(i) ? ' locked' : '');
+  b.innerHTML = `<span class="th" style="background-image:url('${thumb(l.youtubeId)}')">${isLocked(i) ? '<span class="lk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>' : '<span class="pl"><svg width="12" height="12" viewBox="0 0 24 24" fill="#4f46e5"><path d="M7 4v16l13-8z"/></svg></span>'}</span><span class="n">${l.title}</span>`;
   b.addEventListener('click', () => {
     select(i, true);
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -414,6 +444,8 @@ poster.addEventListener('click', startVideo);
 $('prev').addEventListener('click', () => current > 0 && select(current - 1, true));
 $('next').addEventListener('click', () => current < CONFIG.lessons.length - 1 && select(current + 1, true));
 $('lesson-count').textContent = CONFIG.lessons.length;
+const free = Math.min(CONFIG.freeLessons, CONFIG.lessons.length);
+$('list-note').textContent = free >= CONFIG.lessons.length ? '' : `${free} тегін · ${CONFIG.lessons.length - free} жабық`;
 select(0, false);
 
 /* Таймер: алғашқы кіруден бастап 24 сағат (браузерде сақталады) */
