@@ -149,7 +149,7 @@
   body.is-expired .poster,body.is-expired .video iframe,body.is-expired .lessons{display:none!important}
 
   /* список сабақтар */
-  .lessons{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:left}
+  .lessons{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;text-align:left}
   .lesson{
     display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:16px;cursor:pointer;
     background:rgba(255,255,255,.85);border:1.5px solid rgba(15,18,34,.06);font:inherit;color:inherit;text-align:left;
@@ -165,6 +165,7 @@
     content:"Қазір";position:absolute;left:6px;top:6px;z-index:1;padding:2px 8px;border-radius:6px;
     background:var(--brand);color:#fff;font-size:11px;font-weight:700;
   }
+  @media (max-width:640px){.lessons{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:520px){.lessons{gap:8px}.lesson{padding:6px;border-radius:14px}.lesson .n{font-size:13px}}
 
   .lead{
@@ -258,7 +259,7 @@
   </p>
 
   <div class="points reveal" style="animation-delay:.48s">
-    <div class="point"><b>6</b><span>сабақ</span></div>
+    <div class="point"><b id="lesson-count">10</b><span>сабақ</span></div>
     <div class="point"><b>12</b><span>Reels</span></div>
     <div class="point"><b>50K+</b><span>қаралым</span></div>
   </div>
@@ -286,6 +287,10 @@ const CONFIG = {
     { title: '4-сабақ', youtubeId: 'LKFKLZj1wtw' },
     { title: '5-сабақ', youtubeId: 'aOK1i1DQSBo' },
     { title: '6-сабақ', youtubeId: 'NWrTD-P6Fic' },
+    { title: '7-сабақ', youtubeId: 'vc7M3hxBRgk' },
+    { title: '8-сабақ', youtubeId: 'unzl-Lckl80' },
+    { title: '9-сабақ', youtubeId: 'LHvSjoE6VVU' },
+    { title: '10-сабақ', youtubeId: 'ORGHNnCR58A' },
   ],
   accessHours: 24,                      // сколько часов доступен урок с первого визита
   copyright: '© 2026 Атауы · ЖК Тегі А. Ә.'
@@ -332,6 +337,7 @@ CONFIG.lessons.forEach((l, i) => {
   list.appendChild(b);
 });
 poster.addEventListener('click', startVideo);
+$('lesson-count').textContent = CONFIG.lessons.length;
 select(0, false);
 
 /* Таймер: алғашқы кіруден бастап 24 сағат (браузерде сақталады) */
