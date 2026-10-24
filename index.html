@@ -146,7 +146,7 @@
   .expired b{font-size:20px}
   .expired span{opacity:.75;font-size:15px}
   body.is-expired .expired{display:flex}
-  body.is-expired .poster,body.is-expired .video iframe,body.is-expired .lessons{display:none!important}
+  body.is-expired .poster,body.is-expired .video iframe,body.is-expired .lessons,body.is-expired .player-nav,body.is-expired .list-title,body.is-expired .steps{display:none!important}
 
   /* список сабақтар */
   .lessons{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;text-align:left}
@@ -167,6 +167,37 @@
   }
   @media (max-width:640px){.lessons{grid-template-columns:repeat(3,1fr)}}
   @media (max-width:520px){.lessons{gap:8px}.lesson{padding:6px;border-radius:14px}.lesson .n{font-size:13px}}
+
+  .cta-hint{margin-top:10px;font-size:14px;color:var(--muted);font-weight:600}
+
+  /* қалай көремін */
+  .steps{list-style:none;margin:36px auto 0;max-width:640px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:left}
+  .steps li{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.8);border:1px solid rgba(15,18,34,.06);font-size:14px;line-height:1.35;color:#2b2f45}
+  .step-n{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:800;font-size:14px}
+  .video-wrap{margin-top:20px}
+
+  /* ойнатқыш астындағы басқару */
+  .player-nav{margin-top:14px;display:flex;align-items:center;gap:10px}
+  .nav-btn{flex:none;height:48px;padding:0 16px;border-radius:14px;border:1.5px solid rgba(79,70,229,.25);background:#fff;color:var(--brand);font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+  .nav-btn.next{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border-color:transparent}
+  .nav-btn:disabled{opacity:.35;cursor:default}
+  .nav-btn:focus-visible,.lesson:focus-visible,.cta:focus-visible{outline:3px solid var(--brand-3);outline-offset:2px}
+  .now{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .now b{font-size:16px}
+  .now span{font-size:12px;color:var(--muted);font-weight:600}
+  .now .bar{width:100%;max-width:200px;height:6px;border-radius:99px;background:#e3e6ff;overflow:hidden}
+  .now .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand-3));transition:width .4s}
+
+  .list-title{margin-top:36px;font-size:20px;font-weight:800;letter-spacing:-.01em;text-align:left}
+  .lesson.done .th::before{
+    content:"✓ Көрілді";position:absolute;left:6px;top:6px;z-index:1;padding:2px 8px;border-radius:6px;
+    background:#10b981;color:#fff;font-size:11px;font-weight:700;
+  }
+  .lesson .th .pl{position:absolute;right:6px;bottom:6px;z-index:1;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center}
+  @media (max-width:520px){
+    .steps{grid-template-columns:1fr;gap:8px}
+    .nav-btn{height:44px;padding:0 12px;font-size:14px}
+  }
 
   .lead{
     margin:32px auto 0;max-width:560px;font-size:19px;line-height:1.55;color:#2b2f45;text-wrap:balance;
@@ -196,7 +227,7 @@
   }
   @media (max-width:520px){
     main{padding-top:20px}
-    .timer-label{display:none}
+    .timer-label{font-size:12px}
     .seg{min-width:34px;font-size:18px}
     .cta{height:60px;font-size:17px}
     .play{width:72px;height:72px}
@@ -214,7 +245,7 @@
 <main>
   <div class="timer reveal" id="timer" role="timer" aria-live="off">
     <span class="dot"></span>
-    <span class="timer-label">Сабақтар ашық тағы</span>
+    <span class="timer-label">Жабылуына қалды</span>
     <span class="digits">
       <span class="seg" id="h">24</span><span class="colon">:</span>
       <span class="seg" id="m">00</span><span class="colon">:</span>
@@ -230,7 +261,7 @@
 
   <div class="warn reveal" style="animation-delay:.18s">
     <strong>Бетті жаппа</strong>
-    <span>Сабақтарға қолжетімділік 24 сағаттан кейін жабылады</span>
+    <span>24 сағаттан кейін сабақтар жабылады. Үлгеріп көр!</span>
   </div>
 
   <a class="cta reveal" id="cta" style="animation-delay:.25s" href="#" target="_blank" rel="noopener">
@@ -238,6 +269,13 @@
     <span id="cta-text">Авторға жазу</span>
     <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
   </a>
+  <p class="cta-hint reveal" style="animation-delay:.27s">Сұрағың болса, осы батырманы бас</p>
+
+  <ol class="steps reveal" style="animation-delay:.3s" aria-label="Қалай көремін?">
+    <li><span class="step-n">1</span><span>Төменнен <b>сабақты таңда</b></span></li>
+    <li><span class="step-n">2</span><span><b>▶</b> батырмасын бас</span></li>
+    <li><span class="step-n">3</span><span>Біткен соң <b>«Келесі»</b> бас</span></li>
+  </ol>
 
   <div class="video-wrap reveal" style="animation-delay:.32s">
     <div class="video" id="video">
@@ -252,14 +290,25 @@
     </div>
   </div>
 
+  <div class="player-nav reveal" style="animation-delay:.34s">
+    <button type="button" class="nav-btn" id="prev" aria-label="Алдыңғы сабақ">← Алдыңғы</button>
+    <div class="now">
+      <b id="now-title">1-сабақ</b>
+      <span id="progress-text">Көрілді: 0 / 15</span>
+      <span class="bar"><i id="progress-bar"></i></span>
+    </div>
+    <button type="button" class="nav-btn next" id="next" aria-label="Келесі сабақ">Келесі →</button>
+  </div>
+
+  <h2 class="list-title reveal" style="animation-delay:.35s">Барлық сабақтар</h2>
   <div class="lessons reveal" id="lessons" style="animation-delay:.36s"></div>
 
   <p class="lead reveal" style="animation-delay:.4s">
-    Тәжірибеңді <b>ақша әкелетін рилстерге</b> қалай айналдыру керектігін түсіну үшін уақыт бөл
+    Осы сабақтардан өз тәжірибеңді <b>ақша әкелетін рилстерге</b> айналдыруды үйренесің
   </p>
 
   <div class="points reveal" style="animation-delay:.48s">
-    <div class="point"><b id="lesson-count">10</b><span>сабақ</span></div>
+    <div class="point"><b id="lesson-count">15</b><span>сабақ</span></div>
     <div class="point"><b>12</b><span>Reels</span></div>
     <div class="point"><b>50K+</b><span>қаралым</span></div>
   </div>
@@ -311,6 +360,19 @@ const box = $('video'), poster = $('poster'), list = $('lessons');
 const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 let current = 0;
 
+/* Көрілген сабақтар (осы браузерде сақталады) */
+const WKEY = 'lesson_watched_v1';
+let watched = new Set();
+try { watched = new Set(JSON.parse(localStorage.getItem(WKEY) || '[]')); } catch (e) {}
+const saveWatched = () => { try { localStorage.setItem(WKEY, JSON.stringify([...watched])); } catch (e) {} };
+function renderProgress() {
+  const total = CONFIG.lessons.length;
+  const done = CONFIG.lessons.filter(l => watched.has(l.youtubeId)).length;
+  $('progress-text').textContent = `Көрілді: ${done} / ${total}`;
+  $('progress-bar').style.width = (done / total * 100) + '%';
+  [...list.children].forEach((el, j) => el.classList.toggle('done', watched.has(CONFIG.lessons[j].youtubeId) && j !== current));
+}
+
 function select(i, play) {
   current = i;
   const l = CONFIG.lessons[i];
@@ -318,7 +380,11 @@ function select(i, play) {
   poster.style.display = '';
   poster.style.backgroundImage = `url("${thumb(l.youtubeId)}")`;
   $('now-label').textContent = l.title;
+  $('now-title').textContent = l.title;
+  $('prev').disabled = i === 0;
+  $('next').disabled = i === CONFIG.lessons.length - 1;
   [...list.children].forEach((el, j) => el.classList.toggle('active', j === i));
+  renderProgress();
   if (play) startVideo();
 }
 
@@ -329,12 +395,15 @@ function startVideo() {
   f.allowFullscreen = true;
   box.appendChild(f);
   poster.style.display = 'none';
+  watched.add(CONFIG.lessons[current].youtubeId);
+  saveWatched();
+  renderProgress();
 }
 
 CONFIG.lessons.forEach((l, i) => {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'lesson';
-  b.innerHTML = `<span class="th" style="background-image:url('${thumb(l.youtubeId)}')"></span><span class="n">${l.title}</span>`;
+  b.innerHTML = `<span class="th" style="background-image:url('${thumb(l.youtubeId)}')"><span class="pl"><svg width="12" height="12" viewBox="0 0 24 24" fill="#4f46e5"><path d="M7 4v16l13-8z"/></svg></span></span><span class="n">${l.title}</span>`;
   b.addEventListener('click', () => {
     select(i, true);
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -342,6 +411,8 @@ CONFIG.lessons.forEach((l, i) => {
   list.appendChild(b);
 });
 poster.addEventListener('click', startVideo);
+$('prev').addEventListener('click', () => current > 0 && select(current - 1, true));
+$('next').addEventListener('click', () => current < CONFIG.lessons.length - 1 && select(current + 1, true));
 $('lesson-count').textContent = CONFIG.lessons.length;
 select(0, false);
 
