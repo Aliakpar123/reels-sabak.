@@ -562,8 +562,9 @@ const CONFIG = {
   stories: [
     { photo: 'img/story-studio.jpg', tag: 'Dauren Duisenbek', big: 'Топ-продюсер', text: 'Кәсіпкерлер мен блогерлерге Reels арқылы аудитория мен табыс әкелемін' },
     { photo: 'img/story-sunset.jpg', tag: 'Нәтиже', big: '0 → <em>1 млн+</em>', text: 'Бірнеше адамды бірнеше айда нөлден 1 миллион жазылушыға жеткіздім' },
-    { photo: '', tag: 'Дубай', big: 'Танымал блогерлер', text: 'Дубайда жұмыс істеп, белгілі блогерлерді түсірдім' },
-    { photo: 'img/story-mclaren.jpg', tag: 'Арман', big: 'McLaren', text: 'Арманымдағы McLaren көлігін сатып алдым' },
+    { photo: 'img/story-anar.jpg', pos: '40% 30%', tag: 'Дубай', big: 'Танымал блогерлер', text: 'Дубайда жұмыс істеп, белгілі блогерлерді түсірдім' },
+    { photo: 'img/story-mclaren-blue.jpg', pos: '75% center', tag: 'Арман', big: 'McLaren', text: 'Арманымдағы McLaren көлігін сатып алдым' },
+    { photo: 'img/story-plane.jpg', pos: '82% center', tag: 'Follow your dreams', big: 'Масштаб', text: 'Жыл сайын мақсаттар үлкейіп, тезірек орындалады' },
     { photo: '', avatar: true, tag: '15 сабақ', big: '<em>1-сабақ</em> тегін', text: 'Миллион қаралым жинайтын контентті қалай түсіретінімді көрсеттім', cta: true },
   ],
   copyright: '© 2026 Dauren Duisenbek · @daurendreams',
@@ -725,7 +726,7 @@ poster.addEventListener('click', startVideo);
     bars.appendChild(document.createElement('i'));
     const el = document.createElement('div');
     el.className = 'st-slide' + (st.cta ? ' has-cta' : '');
-    if (st.photo) el.style.backgroundImage = `url("${st.photo}")`;
+    if (st.photo) { el.style.backgroundImage = `url("${st.photo}")`; if (st.pos) el.style.backgroundPosition = st.pos; }
     else el.style.background = BG[i % BG.length];
     el.innerHTML = (st.avatar && av && !st.photo ? `<img class="st-ava" src="${av}" alt="">` : '') +
       `<span class="st-tag">${st.tag}</span><div class="st-big">${st.big}</div><p class="st-txt">${st.text}</p>` +
