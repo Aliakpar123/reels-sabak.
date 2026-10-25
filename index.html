@@ -151,12 +151,61 @@
   .final p{margin:10px auto 0;max-width:40ch;color:rgba(255,255,255,.72);font-size:16px}
   .final .cta{max-width:360px;margin:18px auto 0}
 
+  /* ---------- Төлем терезесі ---------- */
+  .sheet{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(11,13,24,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .sheet[hidden]{display:none}
+  .sheet-box{width:100%;max-width:480px;max-height:92vh;overflow-y:auto;background:var(--surface);border-radius:24px 24px 0 0;padding:20px max(16px,env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));animation:up .25s ease}
+  @keyframes up{from{transform:translateY(40px);opacity:0}}
+  @media (min-width:560px){.sheet{align-items:center}.sheet-box{border-radius:24px;padding:24px}}
+  .sheet-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .sheet-top h2{font-family:var(--display);font-weight:800;font-size:20px;line-height:1.2}
+  .x{flex:none;width:36px;height:36px;border-radius:50%;border:0;background:var(--bg);font-size:20px;cursor:pointer;line-height:1}
+  .price{margin-top:6px;font-size:15px;color:var(--muted)}
+  .price b{font-family:var(--display);font-size:26px;color:var(--ink);font-weight:800}
+  .pay-steps{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:14px}
+  .pay-steps>li{display:flex;gap:12px}
+  .pay-steps>li>i{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--ink);color:#fff;font-style:normal;font-family:var(--display);font-weight:800;font-size:13px}
+  .pay-steps>li>div{flex:1;min-width:0;font-size:15px;line-height:1.35}
+  .kaspi{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:14px;background:#f14635;color:#fff;font-weight:800;font-size:16px;text-decoration:none}
+  .qr{margin-top:10px;display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;background:var(--bg)}
+  .qr img{width:104px;height:104px;border-radius:8px;background:#fff}
+  .qr span{font-size:13px;color:var(--muted)}
+  .field{margin-top:10px;display:flex;flex-direction:column;gap:4px}
+  .field label{font-size:13px;font-weight:700;color:var(--muted)}
+  .field input{height:50px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);padding:0 14px;font:inherit;font-size:16px;color:var(--ink)}
+  .field input:focus{outline:none;border-color:var(--accent);background:#fff}
+  .err{margin-top:10px;font-size:14px;color:#d92d20;font-weight:600}
+  .err:empty{display:none}
+  .paid-btn{margin-top:16px;width:100%;height:56px;border-radius:14px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:17px;cursor:pointer}
+  .paid-btn:disabled{opacity:.6;cursor:default}
+  .state{text-align:center;padding:12px 0 4px}
+  .state .big{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:30px}
+  .state h3{font-family:var(--display);font-weight:800;font-size:20px}
+  .state p{margin-top:8px;color:var(--muted);font-size:15px}
+  .spin{border:4px solid var(--accent-soft);border-top-color:var(--accent);animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .linkbox{margin-top:14px;display:flex;gap:8px}
+  .linkbox input{flex:1;min-width:0;height:44px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);padding:0 10px;font:inherit;font-size:13px}
+  .linkbox button{flex:none;height:44px;padding:0 14px;border-radius:10px;border:0;background:var(--ink);color:#fff;font-weight:700;cursor:pointer}
+  .sec-btn{margin-top:12px;display:inline-block;font-size:14px;font-weight:700;color:var(--accent);text-decoration:none;background:none;border:0;cursor:pointer}
+
+  /* жабық плитка — суретсіз */
+  .tile.locked .bgi{background-image:linear-gradient(135deg,#2a2f55,#14172b)!important;filter:none}
+  .tile.locked:nth-child(3n+2) .bgi{background-image:linear-gradient(135deg,#3a2f55,#17142b)!important}
+  .tile.locked:nth-child(3n) .bgi{background-image:linear-gradient(135deg,#25405a,#121a2b)!important}
+  .locked-panel{background:linear-gradient(135deg,#2a2f55,#0b0d18)}
+  .owned{display:none;margin-top:12px;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:rgba(18,183,106,.12);color:#067647;font-weight:800}
+  body.is-paid .owned{display:flex}
+  body.is-paid .recbar,body.is-paid .buy-only{display:none!important}
+  .buy-btn{margin-top:14px;width:100%;height:56px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+  .final .buy-btn{max-width:360px;background:var(--accent)}
+
   footer{background:#080a14;color:rgba(255,255,255,.5);padding-block:28px calc(28px + env(safe-area-inset-bottom));text-align:center;font-size:13px}
   footer nav{margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px}
   footer a{color:rgba(255,255,255,.82);text-decoration:none}
   footer a:hover{color:#fff;text-decoration:underline}
 
-  body.is-expired .locked-panel,body.is-expired .poster,body.is-expired .frame iframe,body.is-expired .grid-sec,body.is-expired .story,body.is-expired .p-foot,body.is-expired .how{display:none!important}
+  body.is-expired .locked-panel,body.is-expired .poster,body.is-expired .frame iframe,body.is-expired .how{display:none!important}
 
   @media (min-width:700px){
     .grid{grid-template-columns:repeat(5,1fr)}
@@ -206,6 +255,8 @@
       <span id="cta-text">Авторға жазу</span>
     </a>
     <p class="cta-hint">Сұрағың болса, осы батырманы бас</p>
+    <button type="button" class="buy-btn buy-only" data-buy>🔓 Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
+    <div class="owned">✓ Барлық сабақтар ашық</div>
   </section>
 
   <section class="how" aria-label="Қалай көремін?">
@@ -232,11 +283,12 @@
         <span class="lock-big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
         <b>Бұл сабақ жабық</b>
         <span>Барлық сабақтарды ашу үшін авторға жаз</span>
-        <a class="unlock-btn" id="unlock-btn" href="#" target="_blank" rel="noopener">Сабақтарды ашу</a>
+        <button type="button" class="unlock-btn" data-buy style="border:0;cursor:pointer;font:inherit;font-weight:800">Ашу · <span class="price-txt">4 490 ₸</span></button>
       </div>
       <div class="expired">
-        <b>Сабақтарға қолжетімділік жабылды</b>
-        <span>Жазбаны алу үшін авторға жаз</span>
+        <b>Тегін сабақ жабылды</b>
+        <span>Барлық сабақтарды ашып, кез келген уақытта көре аласың</span>
+        <button type="button" class="unlock-btn" data-buy style="border:0;cursor:pointer;font:inherit;font-weight:800">Ашу · <span class="price-txt">4 490 ₸</span></button>
       </div>
     </div>
     <div class="story" id="story" aria-hidden="true"></div>
@@ -257,13 +309,73 @@
 
   <section class="final">
     <h2>Барлық <span id="final-count">15</span> сабақты аш</h2>
-    <p>Өз тәжірибеңді ақша әкелетін рилстерге айналдыруды үйрен. Сұрақ болса, авторға жаз.</p>
-    <a class="cta" id="cta2" href="#" target="_blank" rel="noopener">
+    <p>Өз тәжірибеңді ақша әкелетін рилстерге айналдыруды үйрен. Бір рет төлейсің, сабақтар сенде қалады.</p>
+    <button type="button" class="buy-btn buy-only" data-buy>Сабақтарды ашу · <span class="price-txt">4 490 ₸</span></button>
+    <a class="cta" id="cta2" href="#" target="_blank" rel="noopener" style="background:transparent;box-shadow:none;border:1.5px solid rgba(255,255,255,.25)">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
       <span id="cta2-text">Авторға жазу</span>
     </a>
   </section>
 </main>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet-box">
+    <div id="step-pay">
+      <div class="sheet-top">
+        <div>
+          <h2 id="sheet-title">Барлық <span class="n-count">15</span> сабақты ашу</h2>
+          <p class="price"><b class="price-txt">4 490 ₸</b> · бір рет төлейсің</p>
+        </div>
+        <button type="button" class="x" data-close aria-label="Жабу">×</button>
+      </div>
+      <ol class="pay-steps">
+        <li><i>1</i><div><b>Kaspi арқылы төле</b>
+          <a class="kaspi" id="kaspi-link" href="#" target="_blank" rel="noopener">Kaspi-де төлеу · <span class="price-txt">4 490 ₸</span></a>
+          <div class="qr"><img src="kaspi-qr.svg" alt="Kaspi QR"><span>Компьютерден кірсең, телефонмен осы QR-ды сканерле</span></div>
+        </div></li>
+        <li><i>2</i><div><b>Атың мен WhatsApp нөміріңді жаз</b>
+          <div class="field"><label for="pay-name">Аты-жөні</label><input id="pay-name" autocomplete="name" placeholder="Мысалы: Айгерім"></div>
+          <div class="field"><label for="pay-phone">WhatsApp нөмірі</label><input id="pay-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 700 000 00 00"></div>
+        </div></li>
+        <li><i>3</i><div><b>«Төледім» батырмасын бас</b><br><span style="color:var(--muted);font-size:14px">Төлемді тексерген соң сабақтар осы жерде өзі ашылады</span></div></li>
+      </ol>
+      <p class="err" id="pay-err"></p>
+      <button type="button" class="paid-btn" id="paid-btn">Төледім</button>
+    </div>
+
+    <div id="step-wait" hidden>
+      <div class="sheet-top"><span></span><button type="button" class="x" data-close aria-label="Жабу">×</button></div>
+      <div class="state">
+        <div class="big spin"></div>
+        <h3>Төлем тексерілуде</h3>
+        <p>Әдетте бірнеше минут. Бетті жаппа: сабақтар өзі ашылады. Жапсаң да, кейін кіргенде ашық болады.</p>
+        <a class="sec-btn" id="wait-contact" href="#" target="_blank" rel="noopener">Ұзақ күттің бе? Авторға жаз</a>
+      </div>
+    </div>
+
+    <div id="step-done" hidden>
+      <div class="sheet-top"><span></span><button type="button" class="x" data-close aria-label="Жабу">×</button></div>
+      <div class="state">
+        <div class="big" style="background:rgba(18,183,106,.14)">🎉</div>
+        <h3>Сабақтар ашылды!</h3>
+        <p>Басқа телефоннан кіру үшін осы жеке сілтемені сақтап қой:</p>
+        <div class="linkbox"><input id="my-link" readonly aria-label="Жеке сілтеме"><button type="button" id="copy-link">Көшіру</button></div>
+        <button type="button" class="paid-btn" data-close>Сабақтарды көру</button>
+      </div>
+    </div>
+
+    <div id="step-rejected" hidden>
+      <div class="sheet-top"><span></span><button type="button" class="x" data-close aria-label="Жабу">×</button></div>
+      <div class="state">
+        <div class="big" style="background:#fee4e2">!</div>
+        <h3>Төлем табылмады</h3>
+        <p>Егер төлеген болсаң, авторға жаз: тексеріп, ашып береді.</p>
+        <a class="cta" id="rej-contact" href="#" target="_blank" rel="noopener">Авторға жазу</a>
+        <button type="button" class="sec-btn" id="retry">Қайта жіберу</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap">
@@ -283,128 +395,246 @@ const CONFIG = {
   authorPhoto: '',                      // фото автора (ссылка на jpg/png); пусто — первая буква имени
   ctaText: 'Авторға жазу',              // батырма мәтіні, мысалы «Саулеге жазу»
   contactUrl: 'https://t.me/username',  // ссылка на Telegram / WhatsApp (https://wa.me/7XXXXXXXXXX)
-  // Сабақтар (YouTube видео ID)
-  lessons: [
-    { title: '1-сабақ', youtubeId: 'tCkyQO2QImQ' },
-    { title: '2-сабақ', youtubeId: 'w90uDh-Dvwg' },
-    { title: '3-сабақ', youtubeId: '5aNZih39fhU' },
-    { title: '4-сабақ', youtubeId: 'LKFKLZj1wtw' },
-    { title: '5-сабақ', youtubeId: 'aOK1i1DQSBo' },
-    { title: '6-сабақ', youtubeId: 'NWrTD-P6Fic' },
-    { title: '7-сабақ', youtubeId: 'vc7M3hxBRgk' },
-    { title: '8-сабақ', youtubeId: 'unzl-Lckl80' },
-    { title: '9-сабақ', youtubeId: 'LHvSjoE6VVU' },
-    { title: '10-сабақ', youtubeId: 'ORGHNnCR58A' },
-    { title: '11-сабақ', youtubeId: 'T1qdnOiXlok' },
-    { title: '12-сабақ', youtubeId: 'J-YbPjoIOSQ' },
-    { title: '13-сабақ', youtubeId: '4DcENF4guxs' },
-    { title: '14-сабақ', youtubeId: 'LnctOrIUU1o' },
-    { title: '15-сабақ', youtubeId: 'WesL4kmI4Jw' },
-  ],
-  freeLessons: 1,                       // сколько первых уроков открыты бесплатно, остальные с замком
-  accessHours: 24,                      // сколько часов доступен урок с первого визита
-  copyright: '© 2026 Атауы · ЖК Тегі А. Ә.'
+  kaspiUrl: 'https://pay.kaspi.kz/pay/z8ebzhyh', // ссылка Kaspi Pay (QR в kaspi-qr.svg сделан из неё)
+  accessHours: 24,                      // сколько часов бесплатный урок доступен с первого визита
+  copyright: '© 2026 Атауы · ЖК Тегі А. Ә.',
+  // База (Supabase): уроки, цена и заявки хранятся там, не в коде страницы
+  api: 'https://fakhibznbnfycafgvfiw.supabase.co/rest/v1/rpc/',
+  apiKey: 'sb_publishable_CtZFCSLjUTde5NRtGizYyQ_nSJ7LQU2',
 };
 /* ===================================================== */
 
 const $ = id => document.getElementById(id);
-const N = CONFIG.lessons.length;
-const free = Math.min(CONFIG.freeLessons, N);
-const isLocked = i => i >= free;
 const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const fmtPrice = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
 const LOCK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>';
 const PLAY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>';
 const CHECK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
+async function api(fn, body = {}) {
+  const r = await fetch(CONFIG.api + fn, {
+    method: 'POST',
+    headers: { apikey: CONFIG.apiKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok) throw new Error((data && data.message) || 'error');
+  return data;
+}
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+
+/* Тексты и ссылки */
 $('author-name').textContent = CONFIG.authorName;
 if (CONFIG.authorPhoto) { $('avatar').style.backgroundImage = `url("${CONFIG.authorPhoto}")`; $('avatar').textContent = ''; }
 else $('avatar').textContent = (CONFIG.authorName.trim()[0] || 'А').toUpperCase();
 ['cta-text', 'cta2-text'].forEach(id => $(id).textContent = CONFIG.ctaText);
-['cta', 'cta2', 'unlock-btn'].forEach(id => $(id).href = CONFIG.contactUrl);
+['cta', 'cta2', 'wait-contact', 'rej-contact'].forEach(id => $(id).href = CONFIG.contactUrl);
+$('kaspi-link').href = CONFIG.kaspiUrl;
 $('copyright').textContent = CONFIG.copyright;
-$('lesson-count').textContent = N;
-$('final-count').textContent = N;
-$('list-note').innerHTML = free >= N ? '' : `<b>${free} тегін</b> · ${N - free} жабық`;
 
-const box = $('video'), poster = $('poster'), list = $('lessons'), story = $('story');
+/* Жеке сілтеме: ?access=<token> */
+const qs = new URLSearchParams(location.search);
+if (/^[0-9a-f-]{36}$/i.test(qs.get('access') || '')) {
+  store.set('order_token', qs.get('access'));
+  history.replaceState(null, '', location.pathname);
+}
+let token = store.get('order_token');
+let paid = false;
+
+/* Сабақтар */
+let lessons = [];
 let current = 0;
+const box = $('video'), poster = $('poster'), list = $('lessons'), story = $('story');
+const isLocked = i => !lessons[i] || lessons[i].locked;
 
-/* Көрілген сабақтар (осы браузерде сақталады) */
 const WKEY = 'lesson_watched_v1';
 let watched = new Set();
-try { watched = new Set(JSON.parse(localStorage.getItem(WKEY) || '[]')); } catch (e) {}
-const saveWatched = () => { try { localStorage.setItem(WKEY, JSON.stringify([...watched])); } catch (e) {} };
+try { watched = new Set(JSON.parse(store.get(WKEY) || '[]')); } catch (e) {}
+const saveWatched = () => store.set(WKEY, JSON.stringify([...watched]));
+const keyOf = l => 'n' + l.n;
 
-CONFIG.lessons.forEach((l, i) => {
-  story.appendChild(document.createElement('i'));
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'tile' + (isLocked(i) ? ' locked' : '');
-  b.setAttribute('aria-label', l.title + (isLocked(i) ? ' (жабық)' : ''));
-  b.innerHTML = `<span class="bgi" style="background-image:url('${thumb(l.youtubeId)}')"></span><span class="ic">${isLocked(i) ? LOCK : PLAY}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>`;
-  b.addEventListener('click', () => {
-    select(i, true);
-    $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
+function build() {
+  const N = lessons.length;
+  const free = lessons.filter(l => !l.locked).length;
+  document.querySelectorAll('.n-count').forEach(el => el.textContent = N);
+  $('lesson-count').textContent = N;
+  $('final-count').textContent = N;
+  $('list-note').innerHTML = free >= N ? '<b>Барлығы ашық</b>' : `<b>${free} тегін</b> · ${N - free} жабық`;
+  story.innerHTML = ''; list.innerHTML = '';
+  lessons.forEach((l, i) => {
+    story.appendChild(document.createElement('i'));
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tile' + (l.locked ? ' locked' : '');
+    b.setAttribute('aria-label', l.title + (l.locked ? ' (жабық)' : ''));
+    b.innerHTML = `<span class="bgi"${l.youtube_id ? ` style="background-image:url('${thumb(l.youtube_id)}')"` : ''}></span><span class="ic">${l.locked ? LOCK : PLAY}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>`;
+    b.addEventListener('click', () => {
+      select(i, !l.locked);
+      $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    list.appendChild(b);
   });
-  list.appendChild(b);
-});
+}
 
 function render() {
-  const done = CONFIG.lessons.filter(l => watched.has(l.youtubeId)).length;
+  const N = lessons.length;
+  const done = lessons.filter(l => watched.has(keyOf(l))).length;
   $('progress-text').textContent = `Көрілді: ${done} / ${N}`;
-  CONFIG.lessons.forEach((l, j) => {
-    const seen = watched.has(l.youtubeId);
-    story.children[j].className = j === current ? 'cur' : seen ? 'done' : isLocked(j) ? 'locked' : '';
+  lessons.forEach((l, j) => {
+    const seen = watched.has(keyOf(l));
+    story.children[j].className = j === current ? 'cur' : seen ? 'done' : l.locked ? 'locked' : '';
     const t = list.children[j];
     t.classList.toggle('active', j === current);
-    t.classList.toggle('done', seen && j !== current && !isLocked(j));
-    if (!isLocked(j)) t.querySelector('.ic').innerHTML = seen && j !== current ? CHECK : PLAY;
+    t.classList.toggle('done', seen && j !== current && !l.locked);
+    if (!l.locked) t.querySelector('.ic').innerHTML = seen && j !== current ? CHECK : PLAY;
   });
 }
 
 function select(i, play) {
   current = i;
-  const l = CONFIG.lessons[i];
+  const l = lessons[i];
   const locked = isLocked(i);
   box.querySelectorAll('iframe').forEach(f => f.remove());
   $('locked-panel').hidden = !locked;
-  $('locked-panel').style.backgroundImage = `url("${thumb(l.youtubeId)}")`;
   poster.style.display = locked ? 'none' : '';
-  poster.style.backgroundImage = `url("${thumb(l.youtubeId)}")`;
+  poster.style.backgroundImage = l.youtube_id ? `url("${thumb(l.youtube_id)}")` : '';
   $('now-label').textContent = l.title;
   $('now-title').textContent = l.title;
-  $('p-count').textContent = `${i + 1} / ${N}`;
+  $('p-count').textContent = `${i + 1} / ${lessons.length}`;
   $('prev').disabled = i === 0;
-  $('next').disabled = i === N - 1;
+  $('next').disabled = i === lessons.length - 1;
   render();
   if (play && !locked) startVideo();
 }
 
 function startVideo() {
-  if (isLocked(current)) return;
+  const l = lessons[current];
+  if (!l || l.locked) return;
   const f = document.createElement('iframe');
-  f.src = `https://www.youtube-nocookie.com/embed/${CONFIG.lessons[current].youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  f.src = `https://www.youtube-nocookie.com/embed/${l.youtube_id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
   f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   f.allowFullscreen = true;
   box.appendChild(f);
   poster.style.display = 'none';
-  watched.add(CONFIG.lessons[current].youtubeId);
+  watched.add(keyOf(l));
   saveWatched();
   render();
 }
 
+async function loadLessons() {
+  try {
+    lessons = await api('get_lessons', { p_token: token || null });
+  } catch (e) {
+    $('list-note').textContent = 'Жүктелмеді, бетті жаңарт';
+    return;
+  }
+  paid = lessons.length > 0 && lessons.every(l => !l.locked) && !!token;
+  document.body.classList.toggle('is-paid', paid);
+  if (paid) document.body.classList.remove('is-expired');
+  build();
+  select(Math.min(current, lessons.length - 1), false);
+}
+
 poster.addEventListener('click', startVideo);
-$('prev').addEventListener('click', () => current > 0 && select(current - 1, true));
-$('next').addEventListener('click', () => current < N - 1 && select(current + 1, true));
-select(0, false);
+$('prev').addEventListener('click', () => current > 0 && select(current - 1, !isLocked(current - 1)));
+$('next').addEventListener('click', () => current < lessons.length - 1 && select(current + 1, !isLocked(current + 1)));
+
+/* Баға */
+api('get_price').then(p => {
+  if (p) document.querySelectorAll('.price-txt').forEach(el => el.textContent = fmtPrice(p));
+}).catch(() => {});
+
+/* ---------- Төлем ---------- */
+const sheet = $('sheet');
+const steps = ['step-pay', 'step-wait', 'step-done', 'step-rejected'];
+const show = id => steps.forEach(s => $(s).hidden = s !== id);
+let pollTimer = null;
+
+function openSheet() {
+  if (paid) return;
+  sheet.hidden = false;
+  document.body.style.overflow = 'hidden';
+  if (token) checkStatus(true); else show('step-pay');
+}
+function closeSheet() {
+  sheet.hidden = true;
+  document.body.style.overflow = '';
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-buy]')) openSheet();
+  if (e.target.closest('[data-close]') || e.target === sheet) closeSheet();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
+
+$('paid-btn').addEventListener('click', async () => {
+  const name = $('pay-name').value.trim();
+  const phone = $('pay-phone').value.trim();
+  $('pay-err').textContent = '';
+  if (name.length < 2) { $('pay-err').textContent = 'Атыңды жаз'; $('pay-name').focus(); return; }
+  if (phone.replace(/\D/g, '').length < 10) { $('pay-err').textContent = 'WhatsApp нөміріңді толық жаз'; $('pay-phone').focus(); return; }
+  $('paid-btn').disabled = true;
+  try {
+    token = await api('create_order', { p_name: name, p_phone: phone });
+    store.set('order_token', token);
+    show('step-wait');
+    startPolling();
+  } catch (e) {
+    $('pay-err').textContent = 'Жіберілмеді. Интернетті тексеріп, қайта бас';
+  } finally {
+    $('paid-btn').disabled = false;
+  }
+});
+
+$('retry').addEventListener('click', () => { store.del('order_token'); token = null; show('step-pay'); });
+
+async function checkStatus(fromOpen) {
+  if (!token) return;
+  let st;
+  try { st = await api('order_status', { p_token: token }); } catch (e) { return; }
+  if (st === 'paid') {
+    stopPolling();
+    await loadLessons();
+    $('my-link').value = location.origin + location.pathname + '?access=' + token;
+    sheet.hidden = false;
+    show('step-done');
+  } else if (st === 'pending') {
+    if (fromOpen) show('step-wait');
+    startPolling();
+  } else if (st === 'rejected') {
+    stopPolling();
+    if (fromOpen || !sheet.hidden) show('step-rejected');
+  } else {
+    store.del('order_token'); token = null;
+    if (fromOpen) show('step-pay');
+  }
+}
+function startPolling() { if (!pollTimer) pollTimer = setInterval(() => checkStatus(false), 5000); }
+function stopPolling() { clearInterval(pollTimer); pollTimer = null; }
+
+$('copy-link').addEventListener('click', () => {
+  const inp = $('my-link');
+  const done = () => { $('copy-link').textContent = 'Көшірілді ✓'; };
+  if (navigator.clipboard) navigator.clipboard.writeText(inp.value).then(done, () => { inp.select(); });
+  else { inp.select(); document.execCommand('copy'); done(); }
+});
+
+/* Старт */
+loadLessons().then(() => {
+  if (token && !paid) {
+    api('order_status', { p_token: token }).then(st => { if (st === 'pending') startPolling(); else if (!st) { store.del('order_token'); token = null; } }).catch(() => {});
+  }
+});
 
 /* Таймер: алғашқы кіруден бастап 24 сағат (браузерде сақталады) */
 const KEY = 'lesson_deadline_v1';
-let deadline;
-try { deadline = Number(localStorage.getItem(KEY)); } catch (e) {}
+let deadline = Number(store.get(KEY));
 if (!deadline) {
   deadline = Date.now() + CONFIG.accessHours * 3600e3;
-  try { localStorage.setItem(KEY, String(deadline)); } catch (e) {}
+  store.set(KEY, String(deadline));
 }
 const pad = n => String(n).padStart(2, '0');
 function tick() {
@@ -412,9 +642,9 @@ function tick() {
   const t = Math.floor(left / 1000);
   $('clock').textContent = `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t % 3600 / 60))}:${pad(t % 60)}`;
   $('recbar').classList.toggle('urgent', left < 3600e3);
-  if (left === 0) { document.body.classList.add('is-expired'); clearInterval(iv); }
+  if (left === 0 && !paid) document.body.classList.add('is-expired');
 }
-const iv = setInterval(tick, 1000);
+setInterval(tick, 1000);
 tick();
 </script>
 </body>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Заявки на оплату</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800&family=Onest:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eceef3;--surface:#fff;--ink:#0f1222;--muted:#5e6478;--line:rgba(15,18,34,.08);--accent:#2f45ff;--ok:#12b76a;--bad:#d92d20;--warn:#f79009}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Onest',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  button,input{font:inherit;color:inherit}
+  .wrap{max-width:640px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  h1{font-family:'Unbounded',system-ui,sans-serif;font-weight:800;font-size:22px}
+  .sub{margin-top:4px;color:var(--muted);font-size:14px}
+  .card{background:var(--surface);border-radius:18px;padding:16px;margin-top:16px}
+  label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+  input{width:100%;height:50px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);padding:0 14px;font-size:16px}
+  .btn{height:50px;padding:0 18px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+  .btn.full{width:100%;margin-top:12px}
+  .err{margin-top:10px;color:var(--bad);font-weight:600;font-size:14px}
+  .err:empty{display:none}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+  .stat{background:var(--surface);border-radius:14px;padding:12px;text-align:center}
+  .stat b{display:block;font-family:'Unbounded',system-ui,sans-serif;font-size:18px}
+  .stat span{font-size:12px;color:var(--muted);font-weight:600}
+  .tabs{display:flex;gap:6px;margin-top:16px;overflow-x:auto}
+  .tab{flex:none;height:38px;padding:0 14px;border-radius:99px;border:0;background:var(--surface);font-weight:700;font-size:14px;cursor:pointer}
+  .tab.on{background:var(--ink);color:#fff}
+  .order{background:var(--surface);border-radius:16px;padding:14px;margin-top:10px;border-left:4px solid var(--warn)}
+  .order.paid{border-left-color:var(--ok)}
+  .order.rejected{border-left-color:var(--bad);opacity:.75}
+  .o-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .o-name{font-weight:800;font-size:16px}
+  .o-sum{font-weight:800;white-space:nowrap}
+  .o-meta{margin-top:4px;font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+  .o-meta a{color:var(--accent);font-weight:700;text-decoration:none}
+  .o-act{margin-top:12px;display:flex;gap:8px}
+  .o-act button{flex:1;height:44px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+  .yes{background:var(--ok);color:#fff}
+  .no{background:#fee4e2;color:var(--bad)}
+  .undo{background:var(--bg)}
+  .pill{font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;background:#fef0c7;color:#b54708}
+  .pill.paid{background:#d1fadf;color:#067647}
+  .pill.rejected{background:#fee4e2;color:var(--bad)}
+  .empty{margin-top:24px;text-align:center;color:var(--muted)}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .link{background:none;border:0;color:var(--accent);font-weight:700;cursor:pointer;font-size:14px}
+  details{margin-top:24px}
+  summary{cursor:pointer;color:var(--muted);font-weight:700;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="login">
+    <h1>Заявки на оплату</h1>
+    <p class="sub">Вход для автора</p>
+    <form class="card" id="login-form">
+      <label for="pass">Пароль</label>
+      <input id="pass" type="password" autocomplete="current-password" required>
+      <p class="err" id="login-err"></p>
+      <button class="btn full" type="submit">Войти</button>
+    </form>
+  </div>
+
+  <div id="app" hidden>
+    <div class="top">
+      <div>
+        <h1>Заявки</h1>
+        <p class="sub" id="updated">Обновляется само каждые 15 секунд</p>
+      </div>
+      <button class="link" id="logout" type="button">Выйти</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="s-pending">0</b><span>ждут проверки</span></div>
+      <div class="stat"><b id="s-paid">0</b><span>оплатили</span></div>
+      <div class="stat"><b id="s-sum">0 ₸</b><span>получено</span></div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-f="pending" type="button">Ждут</button>
+      <button class="tab" data-f="paid" type="button">Оплатили</button>
+      <button class="tab" data-f="rejected" type="button">Отклонены</button>
+      <button class="tab" data-f="all" type="button">Все</button>
+    </div>
+    <div id="list"></div>
+
+    <details>
+      <summary>Сменить пароль</summary>
+      <form class="card" id="pw-form">
+        <label for="pw-new">Новый пароль (минимум 8 символов)</label>
+        <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required>
+        <p class="err" id="pw-err"></p>
+        <button class="btn full" type="submit">Сохранить</button>
+      </form>
+    </details>
+  </div>
+</div>
+
+<script>
+const API = 'https://fakhibznbnfycafgvfiw.supabase.co/rest/v1/rpc/';
+const KEY = 'sb_publishable_CtZFCSLjUTde5NRtGizYyQ_nSJ7LQU2';
+const $ = id => document.getElementById(id);
+let pass = '';
+try { pass = sessionStorage.getItem('admin_pass') || ''; } catch (e) {}
+let orders = [];
+let filter = 'pending';
+let timer = null;
+
+async function api(fn, body) {
+  const r = await fetch(API + fn, { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const data = await r.json().catch(() => null);
+  if (!r.ok) throw new Error((data && data.message) || 'error');
+  return data;
+}
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
+const when = d => new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const LABEL = { pending: 'ждёт', paid: 'оплачено', rejected: 'отклонено' };
+
+async function load() {
+  try {
+    orders = await api('admin_orders', { p_pass: pass });
+  } catch (e) {
+    if (/bad_password/.test(e.message)) return logout('Неверный пароль');
+    $('updated').textContent = 'Нет связи, пробую снова…';
+    return;
+  }
+  $('updated').textContent = 'Обновлено в ' + new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  render();
+}
+
+function render() {
+  const paid = orders.filter(o => o.status === 'paid');
+  $('s-pending').textContent = orders.filter(o => o.status === 'pending').length;
+  $('s-paid').textContent = paid.length;
+  $('s-sum').textContent = money(paid.reduce((a, o) => a + o.amount, 0));
+  const rows = orders.filter(o => filter === 'all' || o.status === filter);
+  if (!rows.length) { $('list').innerHTML = `<p class="empty">${filter === 'pending' ? 'Новых заявок нет' : 'Пусто'}</p>`; return; }
+  $('list').innerHTML = rows.map(o => {
+    const wa = o.phone.replace(/\D/g, '');
+    const act = o.status === 'pending'
+      ? `<button class="yes" data-id="${o.id}" data-s="paid" type="button">✓ Подтвердить</button><button class="no" data-id="${o.id}" data-s="rejected" type="button">Отклонить</button>`
+      : `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>`;
+    return `<div class="order ${o.status}">
+      <div class="o-top"><span class="o-name">${esc(o.name)}</span><span class="o-sum">${money(o.amount)}</span></div>
+      <div class="o-meta"><a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><span>${when(o.created_at)}</span><span class="pill ${o.status}">${LABEL[o.status]}</span></div>
+      <div class="o-act">${act}</div>
+    </div>`;
+  }).join('');
+}
+
+$('list').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-id]');
+  if (!b) return;
+  b.disabled = true;
+  try { await api('admin_set_status', { p_pass: pass, p_id: b.dataset.id, p_status: b.dataset.s }); }
+  catch (err) { alert('Не получилось, попробуйте ещё раз'); }
+  await load();
+});
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === t));
+  filter = t.dataset.f;
+  render();
+}));
+
+function start() {
+  $('login').hidden = true; $('app').hidden = false;
+  load();
+  clearInterval(timer); timer = setInterval(load, 15000);
+}
+function logout(msg) {
+  pass = ''; try { sessionStorage.removeItem('admin_pass'); } catch (e) {}
+  clearInterval(timer);
+  $('app').hidden = true; $('login').hidden = false;
+  $('login-err').textContent = msg || '';
+}
+$('logout').addEventListener('click', () => logout());
+
+$('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('login-err').textContent = '';
+  const p = $('pass').value;
+  try {
+    await api('admin_orders', { p_pass: p });
+    pass = p; try { sessionStorage.setItem('admin_pass', p); } catch (e) {}
+    start();
+  } catch (err) {
+    $('login-err').textContent = /bad_password/.test(err.message) ? 'Неверный пароль' : 'Нет связи с сервером';
+  }
+});
+
+$('pw-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('pw-err').textContent = '';
+  const n = $('pw-new').value;
+  try {
+    await api('admin_change_password', { p_pass: pass, p_new: n });
+    pass = n; try { sessionStorage.setItem('admin_pass', n); } catch (e) {}
+    $('pw-new').value = '';
+    $('pw-err').style.color = 'var(--ok)'; $('pw-err').textContent = 'Пароль изменён';
+  } catch (err) {
+    $('pw-err').style.color = ''; $('pw-err').textContent = 'Не получилось сменить пароль';
+  }
+});
+
+if (pass) start();
+</script>
+</body>
+</html>
