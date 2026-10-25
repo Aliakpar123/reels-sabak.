@@ -44,6 +44,8 @@
   .no{background:#fee4e2;color:var(--bad)}
   .undo{background:var(--bg)}
   .o-act{flex-wrap:wrap}
+  .code b{color:var(--ink);letter-spacing:.06em}
+  .wa.tg{background:#229ed9}
   .wa{flex:1 1 100%;height:44px;border-radius:10px;background:#25d366;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;text-decoration:none}
   .pill{font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;background:#fef0c7;color:#b54708}
   .pill.paid{background:#d1fadf;color:#067647}
@@ -122,11 +124,12 @@ const money = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
 const when = d => new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 const LABEL = { pending: 'ждёт', paid: 'оплачено', rejected: 'отклонено' };
 const SITE = 'https://aliakpar123.github.io/reels-sabak./';
-const accessMsg = name => `Сәлем, ${name}! Төлеміңіз расталды ✅\n\nСабақтарды көру үшін сайтқа кіріңіз:\n${SITE}\n\nЕгер сабақтар жабық болса, «Бұрын төледің бе? Нөмір арқылы кір» батырмасын басып, төлем жасаған нөміріңізді жазыңыз.`;
+const fmtCode = c => c ? c.replace(/(\d{3})(\d{3})/, '$1 $2') : '';
+const accessMsg = (name, code) => `Сәлем, ${name}! Төлеміңіз расталды ✅\n\nСабақтарды көру үшін сайтқа кіріңіз:\n${SITE}\n\nКіру үшін «Кіру» батырмасын басып, төлем жасаған нөміріңізді және кодты жазыңыз.\nКіру коды: ${fmtCode(code)}`;
 
 async function load() {
   try {
-    orders = await api('admin_orders_v2', { p_pass: pass });
+    orders = await api('admin_orders_v3', { p_pass: pass });
   } catch (e) {
     if (/bad_password/.test(e.message)) return logout('Неверный пароль');
     $('updated').textContent = 'Нет связи, пробую снова…';
@@ -147,12 +150,12 @@ function render() {
     const wa = o.phone.replace(/\D/g, '');
     const act = o.status === 'pending'
       ? `<button class="yes" data-id="${o.id}" data-s="paid" type="button">✓ Подтвердить и отправить</button><button class="no" data-id="${o.id}" data-s="rejected" type="button">Отклонить</button>`
-      : (o.status === 'paid' ? `<a class="wa" href="https://wa.me/${wa}?text=${encodeURIComponent(accessMsg(o.name))}" target="_blank" rel="noopener">Отправить доступ в WhatsApp</a>` : '') +
+      : (o.status === 'paid' ? `<a class="wa" href="https://wa.me/${wa}?text=${encodeURIComponent(accessMsg(o.name, o.access_code))}" target="_blank" rel="noopener">Отправить код в WhatsApp</a><a class="wa tg" href="https://t.me/share/url?url=${encodeURIComponent(SITE)}&text=${encodeURIComponent(accessMsg(o.name, o.access_code))}" target="_blank" rel="noopener">Отправить код в Telegram</a>` : '') +
         `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>` +
-        (o.status === 'paid' && o.logins > 0 ? `<button class="undo" data-reset="${o.id}" type="button">Сбросить входы</button>` : '');
+        (o.status === 'paid' && (o.logins > 0 || o.fails > 0) ? `<button class="undo" data-reset="${o.id}" type="button">${o.fails >= 10 ? 'Разблокировать вход' : 'Сбросить входы'}</button>` : '');
     return `<div class="order ${o.status}">
       <div class="o-top"><span class="o-name">${esc(o.name)}</span><span class="o-sum">${money(o.amount)}</span></div>
-      <div class="o-meta"><a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><span>${when(o.created_at)}</span><span class="pill ${o.status}">${LABEL[o.status]}</span>${o.status === 'paid' ? `<span>входов по номеру: ${o.logins}/3</span>` : ''}</div>
+      <div class="o-meta"><a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><span>${when(o.created_at)}</span><span class="pill ${o.status}">${LABEL[o.status]}</span>${o.status === 'paid' ? `<span class="code">код: <b>${fmtCode(o.access_code)}</b></span><span>входов: ${o.logins}/3</span>${o.fails >= 10 ? '<span class="pill rejected">вход заблокирован</span>' : ''}` : ''}</div>
       <div class="o-act">${act}</div>
     </div>`;
   }).join('');
@@ -169,8 +172,15 @@ $('list').addEventListener('click', async e => {
   if (!b) return;
   b.disabled = true;
   if (b.dataset.s === 'paid') {
-    const o = orders.find(x => x.id === b.dataset.id);
-    if (o) window.open(`https://wa.me/${o.phone.replace(/\D/g, '')}?text=${encodeURIComponent(accessMsg(o.name))}`, '_blank');
+    const w = window.open('', '_blank');
+    try {
+      await api('admin_set_status', { p_pass: pass, p_id: b.dataset.id, p_status: 'paid' });
+      await load();
+      const u = orders.find(x => x.id === b.dataset.id);
+      if (w && u) w.location = `https://wa.me/${u.phone.replace(/\D/g, '')}?text=${encodeURIComponent(accessMsg(u.name, u.access_code))}`;
+      else if (w) w.close();
+    } catch (err) { if (w) w.close(); }
+    return;
   }
   try { await api('admin_set_status', { p_pass: pass, p_id: b.dataset.id, p_status: b.dataset.s }); }
   catch (err) { alert('Не получилось, попробуйте ещё раз'); }
@@ -201,7 +211,7 @@ $('login-form').addEventListener('submit', async e => {
   $('login-err').textContent = '';
   const p = $('pass').value;
   try {
-    await api('admin_orders_v2', { p_pass: p });
+    await api('admin_orders_v3', { p_pass: p });
     pass = p; try { sessionStorage.setItem('admin_pass', p); } catch (e) {}
     start();
   } catch (err) {

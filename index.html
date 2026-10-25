@@ -42,6 +42,9 @@
   @keyframes blink{to{visibility:hidden}}
   .rec-label{font-size:13px;color:rgba(255,255,255,.7)}
   .clock{font-family:var(--display);font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .rec-login{margin-left:auto;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:99px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+  body.is-paid .rec-login{display:none}
+  @media (max-width:440px){.rec-label{display:none}.recbar-in{gap:10px}}
   .recbar.urgent{background:#3a0d12}
   .recbar.urgent .clock{color:#ff8a80}
 
@@ -261,6 +264,8 @@
   .state p{margin-top:8px;color:var(--muted);font-size:15px}
   .spin{border:4px solid var(--accent-soft);border-top-color:var(--accent);animation:sp 1s linear infinite}
   @keyframes sp{to{transform:rotate(360deg)}}
+  .login-help{margin-top:8px;font-size:13px;color:var(--muted)}
+  .code-big{margin:14px auto 0;display:inline-block;padding:10px 18px;border-radius:14px;background:var(--bg);font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.08em}
   .linkbox{margin-top:14px;display:flex;gap:8px}
   .linkbox input{flex:1;min-width:0;height:44px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);padding:0 10px;font:inherit;font-size:13px}
   .linkbox button{flex:none;height:44px;padding:0 14px;border-radius:10px;border:0;background:var(--ink);color:#fff;font-weight:700;cursor:pointer}
@@ -333,6 +338,7 @@
     <span class="rec"><i></i>REC</span>
     <span class="rec-label">Жабылуына қалды</span>
     <span class="clock" id="clock">24:00:00</span>
+    <button type="button" class="rec-login" data-login><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>Кіру</button>
   </div>
 </div>
 
@@ -371,7 +377,7 @@
     <p class="cta-hint">Пайдалы кеңестер мен жаңалықтар — Telegram арнада</p>
     <button type="button" class="buy-btn buy-only" data-buy><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
     <div class="owned"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Барлық сабақтар ашық</div>
-    <button type="button" class="login-link" data-login hidden>Бұрын төледің бе? Нөмір арқылы кір</button>
+    <button type="button" class="login-link" data-login hidden>Бұрын төледің бе? Нөмір мен код арқылы кір</button>
   </section>
 
   <section class="about" aria-label="Dauren кім?">
@@ -495,10 +501,12 @@
 
     <div id="step-login" hidden>
       <div class="sheet-top">
-        <div><h2>Нөмір арқылы кіру</h2><p class="price">Төлем жасаған WhatsApp нөміріңді жаз</p></div>
+        <div><h2>Кіру</h2><p class="price">Төлем жасаған нөмір мен кіру кодын жаз</p></div>
         <button type="button" class="x" data-close aria-label="Жабу">×</button>
       </div>
       <div class="field" style="margin-top:16px"><label for="login-phone">WhatsApp нөмірі</label><input id="login-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 700 000 00 00"></div>
+      <div class="field"><label for="login-code">Кіру коды (6 сан)</label><input id="login-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000 000"></div>
+      <p class="login-help">Кодты төлем расталған соң WhatsApp немесе Telegram арқылы жібереміз. Код келмесе, авторға жаз.</p>
       <p class="err" id="login-err"></p>
       <button type="button" class="paid-btn" id="login-btn">Кіру</button>
       <button type="button" class="sec-btn" data-buy-form>Әлі төлеген жоқпын</button>
@@ -519,7 +527,9 @@
       <div class="state">
         <div class="big" style="background:rgba(18,183,106,.14);color:#12b76a"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
         <h3>Сабақтар ашылды!</h3>
-        <p>Басқа телефоннан кіру үшін осы жеке сілтемені сақтап қой:</p>
+        <p>Сенің кіру кодың — оны сақтап қой. Басқа телефоннан нөмір мен осы код арқылы кіресің:</p>
+        <div class="code-big" id="my-code">— — —</div>
+        <p style="margin-top:12px">Немесе жеке сілтемені сақта:</p>
         <div class="linkbox"><input id="my-link" readonly aria-label="Жеке сілтеме"><button type="button" id="copy-link">Көшіру</button></div>
         <button type="button" class="paid-btn" data-close>Сабақтарды көру</button>
       </div>
@@ -828,9 +838,8 @@ async function checkStatus(fromOpen) {
   if (st === 'paid') {
     stopPolling();
     await loadLessons();
-    $('my-link').value = location.origin + location.pathname + '?access=' + token;
     sheet.hidden = false;
-    show('step-done');
+    await showDone();
   } else if (st === 'pending') {
     if (fromOpen) show('step-wait');
     startPolling();
@@ -841,6 +850,15 @@ async function checkStatus(fromOpen) {
     store.del('order_token'); token = null;
     if (fromOpen) show('step-pay');
   }
+}
+async function showDone() {
+  $('my-link').value = location.origin + location.pathname + '?access=' + token;
+  $('my-code').textContent = '— — —';
+  show('step-done');
+  try {
+    const c = await api('order_code', { p_token: token });
+    if (c) $('my-code').textContent = c.replace(/(\d{3})(\d{3})/, '$1 $2');
+  } catch (e) {}
 }
 function startPolling() { if (!pollTimer) pollTimer = setInterval(() => checkStatus(false), 5000); }
 function stopPolling() { clearInterval(pollTimer); pollTimer = null; }
@@ -867,17 +885,22 @@ function openLogin() {
 }
 $('login-btn').addEventListener('click', async () => {
   const phone = $('login-phone').value.trim();
+  const code = $('login-code').value.replace(/\D/g, '');
   $('login-err').textContent = '';
   if (phone.replace(/\D/g, '').length < 10) { $('login-err').textContent = 'Нөміріңді толық жаз'; return; }
+  if (code.length !== 6) { $('login-err').textContent = 'Кіру коды 6 саннан тұрады'; return; }
   $('login-btn').disabled = true;
   try {
-    const r = await api('login_phone', { p_phone: phone });
+    const r = await api('login_code', { p_phone: phone, p_code: code });
     if (r.status === 'paid') {
       token = r.token;
       store.set('order_token', token);
       await loadLessons();
-      $('my-link').value = location.origin + location.pathname + '?access=' + token;
-      show('step-done');
+      await showDone();
+    } else if (r.status === 'bad_code') {
+      $('login-err').textContent = 'Код қате. Хабарламадағы кодты тексер';
+    } else if (r.status === 'locked') {
+      $('login-err').textContent = 'Тым көп қате код енгізілді. Авторға жаз, ол қайта ашып береді';
     } else if (r.status === 'pending') {
       $('login-err').textContent = 'Төлемің әлі тексерілуде. Сәл күте тұр';
     } else if (r.status === 'limit') {
