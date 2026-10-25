@@ -43,6 +43,8 @@
   .yes{background:var(--ok);color:#fff}
   .no{background:#fee4e2;color:var(--bad)}
   .undo{background:var(--bg)}
+  .o-act{flex-wrap:wrap}
+  .wa{flex:1 1 100%;height:44px;border-radius:10px;background:#25d366;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;text-decoration:none}
   .pill{font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;background:#fef0c7;color:#b54708}
   .pill.paid{background:#d1fadf;color:#067647}
   .pill.rejected{background:#fee4e2;color:var(--bad)}
@@ -119,6 +121,8 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 const money = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
 const when = d => new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 const LABEL = { pending: 'ждёт', paid: 'оплачено', rejected: 'отклонено' };
+const SITE = 'https://aliakpar123.github.io/reels-sabak./';
+const accessMsg = name => `Сәлем, ${name}! Төлеміңіз расталды ✅\n\nСабақтарды көру үшін сайтқа кіріңіз:\n${SITE}\n\nЕгер сабақтар жабық болса, «Бұрын төледің бе? Нөмір арқылы кір» батырмасын басып, төлем жасаған нөміріңізді жазыңыз.`;
 
 async function load() {
   try {
@@ -142,8 +146,9 @@ function render() {
   $('list').innerHTML = rows.map(o => {
     const wa = o.phone.replace(/\D/g, '');
     const act = o.status === 'pending'
-      ? `<button class="yes" data-id="${o.id}" data-s="paid" type="button">✓ Подтвердить</button><button class="no" data-id="${o.id}" data-s="rejected" type="button">Отклонить</button>`
-      : `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>` +
+      ? `<button class="yes" data-id="${o.id}" data-s="paid" type="button">✓ Подтвердить и отправить</button><button class="no" data-id="${o.id}" data-s="rejected" type="button">Отклонить</button>`
+      : (o.status === 'paid' ? `<a class="wa" href="https://wa.me/${wa}?text=${encodeURIComponent(accessMsg(o.name))}" target="_blank" rel="noopener">Отправить доступ в WhatsApp</a>` : '') +
+        `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>` +
         (o.status === 'paid' && o.logins > 0 ? `<button class="undo" data-reset="${o.id}" type="button">Сбросить входы</button>` : '');
     return `<div class="order ${o.status}">
       <div class="o-top"><span class="o-name">${esc(o.name)}</span><span class="o-sum">${money(o.amount)}</span></div>
@@ -163,6 +168,10 @@ $('list').addEventListener('click', async e => {
   const b = e.target.closest('button[data-id]');
   if (!b) return;
   b.disabled = true;
+  if (b.dataset.s === 'paid') {
+    const o = orders.find(x => x.id === b.dataset.id);
+    if (o) window.open(`https://wa.me/${o.phone.replace(/\D/g, '')}?text=${encodeURIComponent(accessMsg(o.name))}`, '_blank');
+  }
   try { await api('admin_set_status', { p_pass: pass, p_id: b.dataset.id, p_status: b.dataset.s }); }
   catch (err) { alert('Не получилось, попробуйте ещё раз'); }
   await load();
