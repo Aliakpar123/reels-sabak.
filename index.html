@@ -83,6 +83,24 @@
   .reelhero .r-views{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:#2f45ff;font-weight:800;font-size:13px}
   .reelhero .r-cap p{margin-top:8px;font-size:14px;line-height:1.35;opacity:.92}
   .reelhero .r-cap u{text-decoration:none;font-weight:700;white-space:nowrap}
+  .reelhero{cursor:default;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  .st-slides{position:absolute;inset:0}
+  .st-slide{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:0 18px 22px;background:#0f1222 center/cover no-repeat}
+  .st-slide.on{opacity:1}
+  .st-slide::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,24,.35),rgba(11,13,24,.1) 35%,rgba(11,13,24,.8))}
+  .st-slide>*{position:relative}
+  .st-big{font-family:var(--display);font-weight:800;font-size:clamp(34px,11vw,56px);line-height:1;letter-spacing:-.03em}
+  .st-big em{font-style:normal;color:#8fa0ff}
+  .st-txt{margin-top:10px;font-size:16px;line-height:1.4;opacity:.92;max-width:28ch}
+  .st-tag{align-self:flex-start;margin-bottom:12px;padding:5px 11px;border-radius:99px;background:#2f45ff;font-weight:800;font-size:13px}
+  .st-ava{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+  .st-cta{margin-top:14px;align-self:flex-start;height:48px;padding:0 18px;border-radius:14px;border:0;background:#fff;color:#0f1222;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+  .st-hint{position:absolute;right:14px;top:30px;z-index:3;font-size:12px;font-weight:700;opacity:.6}
+  .r-bars i.done::after{content:"";display:block;height:100%;background:#fff}
+  .r-bars i.cur::after{content:"";display:block;height:100%;background:#fff;transform-origin:left;animation:rfill var(--dur,4s) linear forwards}
+  .reelhero.paused .r-bars i.cur::after{animation-play-state:paused}
+  .reelhero .r-bars i:first-child::after{animation:none}
+  .reelhero .r-bars i.cur:first-child::after{animation:rfill var(--dur,4s) linear forwards}
   .reelhero:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
   @media (min-width:700px){.reelhero{max-width:420px;margin-inline:auto}}
 
@@ -322,15 +340,12 @@
     <h1><span class="mark">Миллиондаған қаралым</span> әкелген сабақтарым — небәрі <span class="nowrap price-txt">4 490 ₸</span></h1>
     <p class="lede">Миллион қаралым жинайтын контентті қалай түсіретінімді 15 видеосабақта толық көрсеттім. Жеке продюсерлік жұмыстан әлдеқайда арзан.</p>
     <p class="sign">— Dauren Duisenbek, @daurendreams</p>
-    <button type="button" class="reelhero" id="reelhero" aria-label="1-сабақты тегін көру">
-      <span class="r-bg" style="background-image:url('img/dauren-avatar.jpg')"></span>
-      <span class="r-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <span class="r-who"><img src="img/dauren-avatar.jpg" alt="">daurendreams <span>· Reels</span></span>
-      <span class="r-center"><img src="img/dauren-avatar.jpg" alt=""></span>
-      <span class="r-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M7 4v16l13-8z"/></svg></span>
-      <span class="r-side" aria-hidden="true"><span><b>♥</b>105K</span><span><b>▶</b>1M+</span><span><b>↗</b>15</span></span>
-      <span class="r-cap"><span class="r-views">▶ 1 000 000+ қаралым</span><p>Осы видеоларды қалай түсіретінімді 15 сабақта көрсеттім. <u>1-сабақты тегін көр →</u></p></span>
-    </button>
+    <div class="reelhero" id="stories" role="region" aria-roledescription="сторис" aria-label="Dauren туралы сторис">
+      <span class="r-bars" id="st-bars" aria-hidden="true"></span>
+      <span class="r-who"><img src="img/dauren-avatar.jpg" alt="">daurendreams <span>· сторис</span></span>
+      <div class="st-slides" id="st-slides"></div>
+      <span class="st-hint" aria-hidden="true">‹ тап ›</span>
+    </div>
     <p class="warn"><b>1-сабақ тегін.</b> 24 сағаттан кейін жабылады, үлгеріп көр!</p>
   </section>
 
@@ -542,6 +557,14 @@ const CONFIG = {
   kaspiUrl: 'https://pay.kaspi.kz/pay/z8ebzhyh', // ссылка Kaspi Pay (QR в kaspi-qr.svg сделан из неё)
   phoneLogin: true,                     // вход по номеру телефона, с которого оплатили
   accessHours: 24,                      // сколько часов бесплатный урок доступен с первого визита
+  // Сторис наверху. photo — ссылка на фото (фон слайда); если пусто — тёмный фон
+  stories: [
+    { photo: '', avatar: true, tag: 'Dauren Duisenbek', big: 'Топ-продюсер', text: 'Кәсіпкерлер мен блогерлерге Reels арқылы аудитория мен табыс әкелемін' },
+    { photo: '', tag: 'Нәтиже', big: '0 → <em>1 млн+</em>', text: 'Бірнеше адамды бірнеше айда нөлден 1 миллион жазылушыға жеткіздім' },
+    { photo: '', tag: 'Дубай', big: 'Танымал блогерлер', text: 'Дубайда жұмыс істеп, белгілі блогерлерді түсірдім' },
+    { photo: '', tag: 'Арман', big: 'McLaren', text: 'Арманымдағы McLaren көлігін сатып алдым' },
+    { photo: '', tag: '15 сабақ', big: '<em>1-сабақ</em> тегін', text: 'Миллион қаралым жинайтын контентті қалай түсіретінімді көрсеттім', cta: true },
+  ],
   copyright: '© 2026 Dauren Duisenbek · @daurendreams',
   // База (Supabase): уроки, цена и заявки хранятся там, не в коде страницы
   api: 'https://fakhibznbnfycafgvfiw.supabase.co/rest/v1/rpc/',
@@ -690,12 +713,57 @@ async function loadLessons() {
 }
 
 poster.addEventListener('click', startVideo);
-/* Hero-Reel: тегін 1-сабаққа апарады */
-$('reelhero').addEventListener('click', () => {
-  const i = lessons.findIndex(l => !l.locked);
-  if (i >= 0) select(i, true);
-  $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
+
+/* ---------- Сторис: өзі ауысады, тап арқылы алға/артқа ---------- */
+(() => {
+  const box = $('stories'), bars = $('st-bars'), wrap = $('st-slides');
+  const DUR = 4000, S = CONFIG.stories;
+  const av = CONFIG.authorPhoto;
+  const BG = ['radial-gradient(circle at 50% 35%, #2a3a8f, #0f1222 70%)', 'radial-gradient(circle at 80% 20%, #2f45ff, #0f1222 65%)', 'radial-gradient(circle at 20% 15%, #8a5a1f, #0f1222 65%)', 'radial-gradient(circle at 75% 25%, #c2410c, #0f1222 65%)', 'radial-gradient(circle at 30% 20%, #3b2a8f, #0f1222 65%)'];
+  S.forEach((st, i) => {
+    bars.appendChild(document.createElement('i'));
+    const el = document.createElement('div');
+    el.className = 'st-slide';
+    if (st.photo) el.style.backgroundImage = `url("${st.photo}")`;
+    else el.style.background = BG[i % BG.length];
+    el.innerHTML = (st.avatar && av && !st.photo ? `<img class="st-ava" src="${av}" alt="">` : '') +
+      `<span class="st-tag">${st.tag}</span><div class="st-big">${st.big}</div><p class="st-txt">${st.text}</p>` +
+      (st.cta ? '<button type="button" class="st-cta" data-free>▶ 1-сабақты тегін көр</button>' : '');
+    wrap.appendChild(el);
+  });
+  let cur = 0, timer = null, left = DUR, started = 0;
+  function show(i) {
+    cur = (i + S.length) % S.length;
+    [...wrap.children].forEach((el, j) => el.classList.toggle('on', j === cur));
+    [...bars.children].forEach((b, j) => { b.className = j < cur ? 'done' : ''; });
+    void bars.offsetWidth;
+    bars.children[cur].className = 'cur';
+    box.style.setProperty('--dur', DUR + 'ms');
+    left = DUR; run();
+  }
+  function run() { clearTimeout(timer); started = Date.now(); timer = setTimeout(() => show(cur + 1), left); }
+  function pause() { clearTimeout(timer); left -= Date.now() - started; box.classList.add('paused'); }
+  function resume() { box.classList.remove('paused'); run(); }
+  let downAt = 0;
+  box.addEventListener('pointerdown', e => { if (e.target.closest('[data-free]')) return; downAt = Date.now(); pause(); });
+  box.addEventListener('pointerup', e => {
+    if (e.target.closest('[data-free]')) return;
+    const held = Date.now() - downAt > 300;
+    if (held) return resume();
+    const r = box.getBoundingClientRect();
+    box.classList.remove('paused');
+    show(e.clientX - r.left < r.width / 3 ? cur - 1 : cur + 1);
+  });
+  box.addEventListener('pointerleave', () => { if (box.classList.contains('paused')) resume(); });
+  box.addEventListener('click', e => {
+    if (!e.target.closest('[data-free]')) return;
+    const i = lessons.findIndex(l => !l.locked);
+    if (i >= 0) select(i, true);
+    $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  document.addEventListener('visibilitychange', () => document.hidden ? pause() : resume());
+  show(0);
+})();
 
 $('prev').addEventListener('click', () => current > 0 && select(current - 1, !isLocked(current - 1)));
 $('next').addEventListener('click', () => current < lessons.length - 1 && select(current + 1, !isLocked(current + 1)));
