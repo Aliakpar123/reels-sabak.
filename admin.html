@@ -122,7 +122,7 @@ const LABEL = { pending: 'ждёт', paid: 'оплачено', rejected: 'отк
 
 async function load() {
   try {
-    orders = await api('admin_orders', { p_pass: pass });
+    orders = await api('admin_orders_v2', { p_pass: pass });
   } catch (e) {
     if (/bad_password/.test(e.message)) return logout('Неверный пароль');
     $('updated').textContent = 'Нет связи, пробую снова…';
@@ -143,16 +143,23 @@ function render() {
     const wa = o.phone.replace(/\D/g, '');
     const act = o.status === 'pending'
       ? `<button class="yes" data-id="${o.id}" data-s="paid" type="button">✓ Подтвердить</button><button class="no" data-id="${o.id}" data-s="rejected" type="button">Отклонить</button>`
-      : `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>`;
+      : `<button class="undo" data-id="${o.id}" data-s="pending" type="button">Вернуть в «ждут»</button>` +
+        (o.status === 'paid' && o.logins > 0 ? `<button class="undo" data-reset="${o.id}" type="button">Сбросить входы</button>` : '');
     return `<div class="order ${o.status}">
       <div class="o-top"><span class="o-name">${esc(o.name)}</span><span class="o-sum">${money(o.amount)}</span></div>
-      <div class="o-meta"><a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><span>${when(o.created_at)}</span><span class="pill ${o.status}">${LABEL[o.status]}</span></div>
+      <div class="o-meta"><a href="https://wa.me/${wa}" target="_blank" rel="noopener">${esc(o.phone)}</a><span>${when(o.created_at)}</span><span class="pill ${o.status}">${LABEL[o.status]}</span>${o.status === 'paid' ? `<span>входов по номеру: ${o.logins}/3</span>` : ''}</div>
       <div class="o-act">${act}</div>
     </div>`;
   }).join('');
 }
 
 $('list').addEventListener('click', async e => {
+  const r = e.target.closest('button[data-reset]');
+  if (r) {
+    r.disabled = true;
+    try { await api('admin_reset_logins', { p_pass: pass, p_id: r.dataset.reset }); } catch (err) { alert('Не получилось, попробуйте ещё раз'); }
+    return load();
+  }
   const b = e.target.closest('button[data-id]');
   if (!b) return;
   b.disabled = true;
@@ -185,7 +192,7 @@ $('login-form').addEventListener('submit', async e => {
   $('login-err').textContent = '';
   const p = $('pass').value;
   try {
-    await api('admin_orders', { p_pass: p });
+    await api('admin_orders_v2', { p_pass: p });
     pass = p; try { sessionStorage.setItem('admin_pass', p); } catch (e) {}
     start();
   } catch (err) {
