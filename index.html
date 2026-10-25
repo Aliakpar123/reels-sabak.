@@ -152,7 +152,7 @@
   .who-card{background:var(--surface);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
   .who-card b{font-size:15px;font-weight:800}
   .who-card p{font-size:13px;line-height:1.35;color:var(--muted)}
-  .who-ic{width:36px;height:36px;border-radius:11px;background:var(--accent-soft);display:grid;place-items:center;font-size:18px}
+  .who-ic{width:38px;height:38px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
   @media (max-width:520px){.who-grid{grid-template-columns:1fr}.who-card{display:grid;grid-template-columns:36px 1fr;column-gap:12px;row-gap:2px;align-items:center}.who-ic{grid-row:span 2}}
 
   /* ---------- Қалай көремін ---------- */
@@ -198,7 +198,7 @@
   .story i.cur{background:var(--accent)}
   .story i.locked{background:repeating-linear-gradient(90deg,rgba(15,18,34,.16) 0 3px,transparent 3px 5px)}
   .p-foot{margin-top:12px;display:flex;align-items:center;gap:8px}
-  .nav-btn{height:48px;padding:0 18px;border-radius:14px;border:0;background:var(--surface);font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 1px 0 var(--line)}
+  .nav-btn{display:inline-flex;align-items:center;gap:6px;height:48px;padding:0 18px;border-radius:14px;border:0;background:var(--surface);font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 1px 0 var(--line)}
   .nav-btn.next{margin-left:auto;background:var(--ink);color:#fff}
   .nav-btn:disabled{opacity:.35;cursor:default}
   .seen{flex:1;text-align:center;font-size:13px;color:var(--muted);font-weight:600}
@@ -274,7 +274,7 @@
   .owned{display:none;margin-top:12px;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:rgba(18,183,106,.12);color:#067647;font-weight:800}
   body.is-paid .owned{display:flex}
   body.is-paid .recbar,body.is-paid .buy-only{display:none!important}
-  .buy-btn{margin-top:14px;width:100%;height:56px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+  .buy-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;width:100%;height:56px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:16px;cursor:pointer}
   .final .buy-btn{max-width:360px;background:var(--accent)}
 
   /* Төменгі бекітілген төлем батырмасы */
@@ -369,8 +369,8 @@
       <span id="cta-text">Telegram арнаға өту</span>
     </a>
     <p class="cta-hint">Пайдалы кеңестер мен жаңалықтар — Telegram арнада</p>
-    <button type="button" class="buy-btn buy-only" data-buy>🔓 Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
-    <div class="owned">✓ Барлық сабақтар ашық</div>
+    <button type="button" class="buy-btn buy-only" data-buy><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
+    <div class="owned"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Барлық сабақтар ашық</div>
     <button type="button" class="login-link" data-login hidden>Бұрын төледің бе? Нөмір арқылы кір</button>
   </section>
 
@@ -388,9 +388,9 @@
   <section class="who" aria-label="Бұл сабақтар кімге?">
     <h2 class="sec-title">Бұл сабақтар кімге?</h2>
     <div class="who-grid">
-      <div class="who-card"><span class="who-ic">💼</span><b>Кәсіпкерлерге</b><p>Бизнесіңді Reels арқылы көрсетіп, жаңа клиент тарт</p></div>
-      <div class="who-card"><span class="who-ic">📱</span><b>Блогерлерге</b><p>Қаралым мен жазылушыны жүйелі түрде өсір</p></div>
-      <div class="who-card"><span class="who-ic">🎓</span><b>Сарапшыларға</b><p>Тәжірибеңді контентке айналдырып, табыс тап</p></div>
+      <div class="who-card"><span class="who-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><b>Кәсіпкерлерге</b><p>Бизнесіңді Reels арқылы көрсетіп, жаңа клиент тарт</p></div>
+      <div class="who-card"><span class="who-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></span><b>Блогерлерге</b><p>Қаралым мен жазылушыны жүйелі түрде өсір</p></div>
+      <div class="who-card"><span class="who-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span><b>Сарапшыларға</b><p>Тәжірибеңді контентке айналдырып, табыс тап</p></div>
     </div>
   </section>
 
@@ -438,9 +438,9 @@
     </div>
     <div class="story" id="story" aria-hidden="true"></div>
     <div class="p-foot">
-      <button type="button" class="nav-btn" id="prev">← Алдыңғы</button>
+      <button type="button" class="nav-btn" id="prev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Алдыңғы</button>
       <span class="seen" id="progress-text">Көрілді: 0 / 15</span>
-      <button type="button" class="nav-btn next" id="next">Келесі →</button>
+      <button type="button" class="nav-btn next" id="next">Келесі <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
     </div>
   </section>
 
@@ -464,7 +464,7 @@
 </main>
 
 <div class="paybar" id="paybar">
-  <a href="#" class="kbtn" id="paybar-link" data-buy target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Сабақтарды ашу · <span class="price-txt">4 490 ₸</span></b><small>👆 Бас, Kaspi арқылы төле</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
+  <a href="#" class="kbtn" id="paybar-link" data-buy target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Сабақтарды ашу · <span class="price-txt">4 490 ₸</span></b><small>Бас, Kaspi арқылы төле</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
   <small>Төлеген соң осы бетке қайтып, «Төледім» бас</small>
 </div>
 
@@ -480,7 +480,7 @@
       </div>
       <ol class="pay-steps">
         <li><i>1</i><div><b>Kaspi арқылы төле</b><br><span style="color:var(--muted);font-size:14px">Батырманы бас, Kaspi ашылады. Төлеп болған соң осы бетке қайт</span>
-          <a class="kbtn" id="kaspi-link" href="#" target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Kaspi-де төлеу</b><small>👆 Бас, Kaspi ашылады</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
+          <a class="kbtn" id="kaspi-link" href="#" target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Kaspi-де төлеу</b><small>Бас, Kaspi ашылады</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
           <div class="qr"><img src="kaspi-qr.svg" alt="Kaspi QR"><span>Компьютерден кірсең, телефонмен осы QR-ды сканерле</span></div>
         </div></li>
         <li><i>2</i><div><b>Атың мен WhatsApp нөміріңді жаз</b>
@@ -517,7 +517,7 @@
     <div id="step-done" hidden>
       <div class="sheet-top"><span></span><button type="button" class="x" data-close aria-label="Жабу">×</button></div>
       <div class="state">
-        <div class="big" style="background:rgba(18,183,106,.14)">🎉</div>
+        <div class="big" style="background:rgba(18,183,106,.14);color:#12b76a"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
         <h3>Сабақтар ашылды!</h3>
         <p>Басқа телефоннан кіру үшін осы жеке сілтемені сақтап қой:</p>
         <div class="linkbox"><input id="my-link" readonly aria-label="Жеке сілтеме"><button type="button" id="copy-link">Көшіру</button></div>
@@ -528,7 +528,7 @@
     <div id="step-rejected" hidden>
       <div class="sheet-top"><span></span><button type="button" class="x" data-close aria-label="Жабу">×</button></div>
       <div class="state">
-        <div class="big" style="background:#fee4e2">!</div>
+        <div class="big" style="background:#fee4e2;color:#d92d20"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
         <h3>Төлем табылмады</h3>
         <p>Егер төлеген болсаң, авторға жаз: тексеріп, ашып береді.</p>
         <a class="cta" id="rej-contact" href="#" target="_blank" rel="noopener">Авторға жазу</a>
