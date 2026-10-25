@@ -64,6 +64,28 @@
   .p-handle:hover{color:var(--accent)}
   .verified{flex:none}
 
+  /* ---------- Hero: открытый Reel ---------- */
+  .reelhero{margin-top:18px;position:relative;display:block;width:100%;aspect-ratio:9/12;max-width:100%;border:0;padding:0;border-radius:28px;overflow:hidden;background:#0f1222;color:#fff;text-align:left;cursor:pointer;box-shadow:0 30px 60px -30px rgba(15,18,34,.7)}
+  .reelhero .r-bg{position:absolute;inset:-30px;background:center/cover no-repeat;filter:blur(28px) saturate(1.2) brightness(.55)}
+  .reelhero .r-bars{position:absolute;left:14px;right:14px;top:12px;display:flex;gap:4px;z-index:2}
+  .reelhero .r-bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);overflow:hidden}
+  .reelhero .r-bars i:first-child::after{content:"";display:block;height:100%;width:100%;background:#fff;transform-origin:left;animation:rfill 5s linear infinite}
+  @keyframes rfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .reelhero .r-who{position:absolute;left:14px;top:26px;display:flex;align-items:center;gap:8px;z-index:2;font-weight:700;font-size:14px}
+  .reelhero .r-who img{width:34px;height:34px;border-radius:50%;border:2px solid #fff}
+  .reelhero .r-who span{opacity:.7;font-weight:500}
+  .reelhero .r-center{position:absolute;inset:0;display:grid;place-items:center;z-index:1}
+  .reelhero .r-center img{width:132px;height:132px;border-radius:50%;border:4px solid #fff;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+  .reelhero .r-play{position:absolute;left:50%;top:50%;margin:52px 0 0 30px;width:44px;height:44px;border-radius:50%;background:#2f45ff;display:grid;place-items:center;z-index:2;box-shadow:0 8px 20px rgba(47,69,255,.6)}
+  .reelhero .r-side{position:absolute;right:12px;bottom:96px;display:flex;flex-direction:column;gap:16px;z-index:2;text-align:center;font-size:12px;font-weight:700}
+  .reelhero .r-side b{display:block;font-size:22px;line-height:1}
+  .reelhero .r-cap{position:absolute;left:14px;right:70px;bottom:16px;z-index:2}
+  .reelhero .r-views{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:#2f45ff;font-weight:800;font-size:13px}
+  .reelhero .r-cap p{margin-top:8px;font-size:14px;line-height:1.35;opacity:.92}
+  .reelhero .r-cap u{text-decoration:none;font-weight:700;white-space:nowrap}
+  .reelhero:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  @media (min-width:700px){.reelhero{max-width:420px;margin-inline:auto}}
+
   /* ---------- Профиль ---------- */
   .profile{margin-top:24px;background:var(--surface);border-radius:24px;padding:18px;box-shadow:0 1px 0 var(--line),0 18px 40px -28px rgba(15,18,34,.35)}
   .p-top{display:flex;align-items:center;gap:16px}
@@ -300,6 +322,15 @@
     <h1><span class="mark">Миллиондаған қаралым</span> әкелген сабақтарым — небәрі <span class="nowrap price-txt">4 490 ₸</span></h1>
     <p class="lede">Миллион қаралым жинайтын контентті қалай түсіретінімді 15 видеосабақта толық көрсеттім. Жеке продюсерлік жұмыстан әлдеқайда арзан.</p>
     <p class="sign">— Dauren Duisenbek, @daurendreams</p>
+    <button type="button" class="reelhero" id="reelhero" aria-label="1-сабақты тегін көру">
+      <span class="r-bg" style="background-image:url('img/dauren-avatar.jpg')"></span>
+      <span class="r-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="r-who"><img src="img/dauren-avatar.jpg" alt="">daurendreams <span>· Reels</span></span>
+      <span class="r-center"><img src="img/dauren-avatar.jpg" alt=""></span>
+      <span class="r-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M7 4v16l13-8z"/></svg></span>
+      <span class="r-side" aria-hidden="true"><span><b>♥</b>105K</span><span><b>▶</b>1M+</span><span><b>↗</b>15</span></span>
+      <span class="r-cap"><span class="r-views">▶ 1 000 000+ қаралым</span><p>Осы видеоларды қалай түсіретінімді 15 сабақта көрсеттім. <u>1-сабақты тегін көр →</u></p></span>
+    </button>
     <p class="warn"><b>1-сабақ тегін.</b> 24 сағаттан кейін жабылады, үлгеріп көр!</p>
   </section>
 
@@ -659,6 +690,13 @@ async function loadLessons() {
 }
 
 poster.addEventListener('click', startVideo);
+/* Hero-Reel: тегін 1-сабаққа апарады */
+$('reelhero').addEventListener('click', () => {
+  const i = lessons.findIndex(l => !l.locked);
+  if (i >= 0) select(i, true);
+  $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
 $('prev').addEventListener('click', () => current > 0 && select(current - 1, !isLocked(current - 1)));
 $('next').addEventListener('click', () => current < lessons.length - 1 && select(current + 1, !isLocked(current + 1)));
 
