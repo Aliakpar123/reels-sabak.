@@ -282,17 +282,17 @@
   .paybar.show{transform:none}
   .paybar .kbtn{max-width:480px;margin:0 auto}
   /* Kaspi батырмасы: басуға болатыны анық көрінсін */
-  .kbtn{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;gap:12px;min-height:62px;padding:8px 8px 8px 10px;border-radius:16px;background:#f14635;color:#fff;text-decoration:none;box-shadow:0 6px 0 #b8261a,0 14px 28px -10px rgba(241,70,53,.8);transition:transform .12s ease,box-shadow .12s ease;-webkit-tap-highlight-color:transparent;animation:kpulse 2.2s ease-in-out infinite}
-  .kbtn:active{transform:translateY(5px);box-shadow:0 1px 0 #b8261a,0 6px 14px -8px rgba(241,70,53,.8);animation:none}
+  .kbtn{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 8px 8px 8px;border-radius:18px;background:#0f1222;color:#fff;text-decoration:none;box-shadow:0 5px 0 #000,0 16px 30px -12px rgba(15,18,34,.7);transition:transform .12s ease,box-shadow .12s ease;-webkit-tap-highlight-color:transparent;animation:kpulse 2.2s ease-in-out infinite}
+  .kbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #000,0 6px 14px -8px rgba(15,18,34,.7);animation:none}
   .kbtn>*{position:relative;z-index:1}
   .k-txt b .price-txt{white-space:nowrap}
-  .kbtn::after{content:"";position:absolute;z-index:0;top:0;left:-50%;width:35%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-20deg);animation:kshine 2.6s ease-in-out infinite}
+  .kbtn::after{content:"";position:absolute;z-index:0;top:0;left:-50%;width:35%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.14),transparent);transform:skewX(-20deg);animation:kshine 2.8s ease-in-out infinite}
   @keyframes kshine{0%,55%{left:-50%}100%{left:130%}}
-  @keyframes kpulse{0%,100%{box-shadow:0 6px 0 #b8261a,0 14px 28px -10px rgba(241,70,53,.8)}50%{box-shadow:0 6px 0 #b8261a,0 14px 34px -6px rgba(241,70,53,1),0 0 0 6px rgba(241,70,53,.18)}}
-  .k-logo{flex:none;width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;display:grid;place-items:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+  @keyframes kpulse{0%,100%{box-shadow:0 5px 0 #000,0 16px 30px -12px rgba(15,18,34,.7)}50%{box-shadow:0 5px 0 #000,0 16px 34px -8px rgba(241,70,53,.55),0 0 0 5px rgba(241,70,53,.14)}}
+  .k-logo{flex:none;width:46px;height:46px;border-radius:14px;background:#f14635;color:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -6px rgba(241,70,53,.9)}
   .k-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
   .k-txt b{font-size:17px;font-weight:800}
-  .k-txt small{margin-top:3px;font-size:13px;font-weight:600;opacity:.92}
+  .k-txt small{margin-top:3px;font-size:13px;font-weight:700;color:#ff8a7d}
   .k-go{flex:none;width:44px;height:44px;border-radius:50%;background:#fff;color:#f14635;display:grid;place-items:center;animation:knudge 1.2s ease-in-out infinite}
   @keyframes knudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
   .pay-steps .kbtn{margin-top:10px}
