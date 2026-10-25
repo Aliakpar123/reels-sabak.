@@ -200,6 +200,18 @@
   .buy-btn{margin-top:14px;width:100%;height:56px;border-radius:14px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:16px;cursor:pointer}
   .final .buy-btn{max-width:360px;background:var(--accent)}
 
+  /* Төменгі бекітілген төлем батырмасы */
+  .paybar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:rgba(236,238,243,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s ease}
+  .paybar.show{transform:none}
+  .paybar a{max-width:480px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:14px;background:#f14635;color:#fff;font-weight:800;font-size:17px;text-decoration:none;box-shadow:0 10px 24px -10px rgba(241,70,53,.7)}
+  .paybar small{display:block;text-align:center;margin-top:6px;font-size:12px;color:var(--muted);font-weight:600}
+  body.is-paid .paybar{display:none}
+  body{padding-bottom:96px}
+  body.is-paid{padding-bottom:0}
+  .qr{display:none}
+  @media (min-width:700px) and (pointer:fine){.qr{display:flex}}
+  .login-link{display:block;margin:10px auto 0;background:none;border:0;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  body.is-paid .login-link{display:none}
   footer{background:#080a14;color:rgba(255,255,255,.5);padding-block:28px calc(28px + env(safe-area-inset-bottom));text-align:center;font-size:13px}
   footer nav{margin-top:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px}
   footer a{color:rgba(255,255,255,.82);text-decoration:none}
@@ -257,6 +269,7 @@
     <p class="cta-hint">Сұрағың болса, осы батырманы бас</p>
     <button type="button" class="buy-btn buy-only" data-buy>🔓 Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
     <div class="owned">✓ Барлық сабақтар ашық</div>
+    <button type="button" class="login-link" data-login hidden>Бұрын төледің бе? Нөмір арқылы кір</button>
   </section>
 
   <section class="how" aria-label="Қалай көремін?">
@@ -318,6 +331,14 @@
   </section>
 </main>
 
+<div class="paybar" id="paybar">
+  <a href="#" id="paybar-link" data-buy target="_blank" rel="noopener">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+    Kaspi арқылы ашу · <span class="price-txt">4 490 ₸</span>
+  </a>
+  <small>Төлеген соң осы бетке қайтып, «Төледім» бас</small>
+</div>
+
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
   <div class="sheet-box">
     <div id="step-pay">
@@ -329,7 +350,7 @@
         <button type="button" class="x" data-close aria-label="Жабу">×</button>
       </div>
       <ol class="pay-steps">
-        <li><i>1</i><div><b>Kaspi арқылы төле</b>
+        <li><i>1</i><div><b>Kaspi арқылы төле</b><br><span style="color:var(--muted);font-size:14px">Батырманы бас, Kaspi ашылады. Төлеп болған соң осы бетке қайт</span>
           <a class="kaspi" id="kaspi-link" href="#" target="_blank" rel="noopener">Kaspi-де төлеу · <span class="price-txt">4 490 ₸</span></a>
           <div class="qr"><img src="kaspi-qr.svg" alt="Kaspi QR"><span>Компьютерден кірсең, телефонмен осы QR-ды сканерле</span></div>
         </div></li>
@@ -341,6 +362,17 @@
       </ol>
       <p class="err" id="pay-err"></p>
       <button type="button" class="paid-btn" id="paid-btn">Төледім</button>
+    </div>
+
+    <div id="step-login" hidden>
+      <div class="sheet-top">
+        <div><h2>Нөмір арқылы кіру</h2><p class="price">Төлем жасаған WhatsApp нөміріңді жаз</p></div>
+        <button type="button" class="x" data-close aria-label="Жабу">×</button>
+      </div>
+      <div class="field" style="margin-top:16px"><label for="login-phone">WhatsApp нөмірі</label><input id="login-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 700 000 00 00"></div>
+      <p class="err" id="login-err"></p>
+      <button type="button" class="paid-btn" id="login-btn">Кіру</button>
+      <button type="button" class="sec-btn" data-buy-form>Әлі төлеген жоқпын</button>
     </div>
 
     <div id="step-wait" hidden>
@@ -396,6 +428,7 @@ const CONFIG = {
   ctaText: 'Авторға жазу',              // батырма мәтіні, мысалы «Саулеге жазу»
   contactUrl: 'https://t.me/username',  // ссылка на Telegram / WhatsApp (https://wa.me/7XXXXXXXXXX)
   kaspiUrl: 'https://pay.kaspi.kz/pay/z8ebzhyh', // ссылка Kaspi Pay (QR в kaspi-qr.svg сделан из неё)
+  phoneLogin: false,                    // вход по номеру телефона, с которого оплатили
   accessHours: 24,                      // сколько часов бесплатный урок доступен с первого визита
   copyright: '© 2026 Атауы · ЖК Тегі А. Ә.',
   // База (Supabase): уроки, цена и заявки хранятся там, не в коде страницы
@@ -434,6 +467,8 @@ else $('avatar').textContent = (CONFIG.authorName.trim()[0] || 'А').toUpperCase
 ['cta-text', 'cta2-text'].forEach(id => $(id).textContent = CONFIG.ctaText);
 ['cta', 'cta2', 'wait-contact', 'rej-contact'].forEach(id => $(id).href = CONFIG.contactUrl);
 $('kaspi-link').href = CONFIG.kaspiUrl;
+$('paybar-link').href = CONFIG.kaspiUrl;
+if (CONFIG.phoneLogin) document.querySelectorAll('[data-login]').forEach(el => el.hidden = false);
 $('copyright').textContent = CONFIG.copyright;
 
 /* Жеке сілтеме: ?access=<token> */
@@ -550,7 +585,7 @@ api('get_price').then(p => {
 
 /* ---------- Төлем ---------- */
 const sheet = $('sheet');
-const steps = ['step-pay', 'step-wait', 'step-done', 'step-rejected'];
+const steps = ['step-pay', 'step-login', 'step-wait', 'step-done', 'step-rejected'];
 const show = id => steps.forEach(s => $(s).hidden = s !== id);
 let pollTimer = null;
 
@@ -566,6 +601,8 @@ function closeSheet() {
 }
 document.addEventListener('click', e => {
   if (e.target.closest('[data-buy]')) openSheet();
+  if (e.target.closest('[data-login]')) openLogin();
+  if (e.target.closest('[data-buy-form]')) show('step-pay');
   if (e.target.closest('[data-close]') || e.target === sheet) closeSheet();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
@@ -620,6 +657,46 @@ $('copy-link').addEventListener('click', () => {
   const done = () => { $('copy-link').textContent = 'Көшірілді ✓'; };
   if (navigator.clipboard) navigator.clipboard.writeText(inp.value).then(done, () => { inp.select(); });
   else { inp.select(); document.execCommand('copy'); done(); }
+});
+
+/* Төменгі батырма: hero-дан өткен соң көрінеді */
+const paybar = $('paybar');
+const onScroll = () => paybar.classList.toggle('show', window.scrollY > 260);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* Нөмір арқылы кіру */
+function openLogin() {
+  sheet.hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('login-err').textContent = '';
+  show('step-login');
+}
+$('login-btn').addEventListener('click', async () => {
+  const phone = $('login-phone').value.trim();
+  $('login-err').textContent = '';
+  if (phone.replace(/\D/g, '').length < 10) { $('login-err').textContent = 'Нөміріңді толық жаз'; return; }
+  $('login-btn').disabled = true;
+  try {
+    const r = await api('login_phone', { p_phone: phone });
+    if (r.status === 'paid') {
+      token = r.token;
+      store.set('order_token', token);
+      await loadLessons();
+      $('my-link').value = location.origin + location.pathname + '?access=' + token;
+      show('step-done');
+    } else if (r.status === 'pending') {
+      $('login-err').textContent = 'Төлемің әлі тексерілуде. Сәл күте тұр';
+    } else if (r.status === 'limit') {
+      $('login-err').textContent = 'Бұл нөмірмен тым көп құрылғыдан кірілді. Авторға жаз';
+    } else {
+      $('login-err').textContent = 'Бұл нөмірмен төлем табылмады. Төлегенде жазған нөміріңді тексер';
+    }
+  } catch (e) {
+    $('login-err').textContent = 'Қате шықты. Интернетті тексеріп, қайта бас';
+  } finally {
+    $('login-btn').disabled = false;
+  }
 });
 
 /* Старт */
