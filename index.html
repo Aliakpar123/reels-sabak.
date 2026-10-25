@@ -91,6 +91,16 @@
   .learn-list li::before{content:"";position:absolute;left:0;top:13px;width:20px;height:20px;border-radius:7px;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18 8' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
   .learn-list b{color:var(--ink)}
 
+  /* ---------- Автор туралы ---------- */
+  .about{margin-top:28px}
+  .about-lead{margin-top:8px;font-size:15px;line-height:1.45;color:var(--muted)}
+  .facts{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fact{background:var(--ink);color:#fff;border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;gap:6px}
+  .fact b{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;line-height:1.1}
+  .fact:first-child b{color:#8fa0ff}
+  .fact span{font-size:13px;line-height:1.35;color:rgba(255,255,255,.72)}
+  @media (min-width:700px){.facts{grid-template-columns:repeat(4,1fr)}}
+
   /* ---------- Кімге ---------- */
   .p-role{margin-top:2px;font-size:14px;font-weight:700;color:var(--accent)}
   .who{margin-top:28px}
@@ -311,6 +321,17 @@
     <button type="button" class="buy-btn buy-only" data-buy>🔓 Барлық сабақты ашу · <span class="price-txt">4 490 ₸</span></button>
     <div class="owned">✓ Барлық сабақтар ашық</div>
     <button type="button" class="login-link" data-login hidden>Бұрын төледің бе? Нөмір арқылы кір</button>
+  </section>
+
+  <section class="about" aria-label="Dauren кім?">
+    <h2 class="sec-title">Dauren кім?</h2>
+    <p class="about-lead">Кәсіпкер және кәсіпкерлер мен блогерлердің продюсері. Ол Reels-ті теориядан емес, өз нәтижесінен біледі.</p>
+    <div class="facts">
+      <div class="fact"><b>0 → 1 млн+</b><span>Бірнеше адамды бірнеше айда нөлден 1 миллион жазылушыға және одан да жоғары жеткізді</span></div>
+      <div class="fact"><b>Дубай</b><span>Дубайда жұмыс істеп, танымал блогерлерді түсірді</span></div>
+      <div class="fact"><b>Кәсіпкер</b><span>Бизнесті ішінен біледі: контент сатуға қалай жұмыс істейтінін көрсетеді</span></div>
+      <div class="fact"><b>McLaren</b><span>Арманындағы McLaren көлігін сатып алды</span></div>
+    </div>
   </section>
 
   <section class="who" aria-label="Бұл сабақтар кімге?">
