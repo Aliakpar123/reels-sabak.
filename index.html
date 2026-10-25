@@ -195,10 +195,10 @@
   .sec-btn{margin-top:12px;display:inline-block;font-size:14px;font-weight:700;color:var(--accent);text-decoration:none;background:none;border:0;cursor:pointer}
 
   /* жабық плитка — суретсіз */
-  .tile.locked .bgi{background-image:linear-gradient(135deg,#2a2f55,#14172b)!important;filter:none}
-  .tile.locked:nth-child(3n+2) .bgi{background-image:linear-gradient(135deg,#3a2f55,#17142b)!important}
-  .tile.locked:nth-child(3n) .bgi{background-image:linear-gradient(135deg,#25405a,#121a2b)!important}
-  .locked-panel{background:linear-gradient(135deg,#2a2f55,#0b0d18)}
+  .tile.locked{background:linear-gradient(135deg,#2a2f55,#14172b)}
+  .tile.locked .bgi{background-color:transparent;filter:blur(7px) brightness(.6) saturate(.8);transform:scale(1.15)}
+  .tile.locked:hover .bgi{transform:scale(1.2)}
+  .locked-panel{background-color:#1a1d3a}
   .owned{display:none;margin-top:12px;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:rgba(18,183,106,.12);color:#067647;font-weight:800}
   body.is-paid .owned{display:flex}
   body.is-paid .recbar,body.is-paid .buy-only{display:none!important}
@@ -457,6 +457,8 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 const thumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const lockedThumb = n => `${CONFIG.api.replace('/rest/v1/rpc/', '/functions/v1/thumb')}?n=${n}`;
+const cover = l => l.youtube_id ? thumb(l.youtube_id) : lockedThumb(l.n);
 const fmtPrice = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
 const LOCK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>';
 const PLAY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>';
@@ -524,7 +526,7 @@ function build() {
     b.type = 'button';
     b.className = 'tile' + (l.locked ? ' locked' : '');
     b.setAttribute('aria-label', l.title + (l.locked ? ' (жабық)' : ''));
-    b.innerHTML = `<span class="bgi"${l.youtube_id ? ` style="background-image:url('${thumb(l.youtube_id)}')"` : ''}></span><span class="ic">${l.locked ? LOCK : PLAY}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>`;
+    b.innerHTML = `<span class="bgi" style="background-image:url('${cover(l)}')"></span><span class="ic">${l.locked ? LOCK : PLAY}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>`;
     b.addEventListener('click', () => {
       select(i, !l.locked);
       $('player').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -553,6 +555,7 @@ function select(i, play) {
   const locked = isLocked(i);
   box.querySelectorAll('iframe').forEach(f => f.remove());
   $('locked-panel').hidden = !locked;
+  $('locked-panel').style.backgroundImage = locked ? `url("${cover(l)}")` : '';
   poster.style.display = locked ? 'none' : '';
   poster.style.backgroundImage = l.youtube_id ? `url("${thumb(l.youtube_id)}")` : '';
   $('now-label').textContent = l.title;
