@@ -203,7 +203,22 @@
   /* Төменгі бекітілген төлем батырмасы */
   .paybar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:rgba(236,238,243,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s ease}
   .paybar.show{transform:none}
-  .paybar a{max-width:480px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:14px;background:#f14635;color:#fff;font-weight:800;font-size:17px;text-decoration:none;box-shadow:0 10px 24px -10px rgba(241,70,53,.7)}
+  .paybar .kbtn{max-width:480px;margin:0 auto}
+  /* Kaspi батырмасы: басуға болатыны анық көрінсін */
+  .kbtn{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;gap:12px;min-height:62px;padding:8px 8px 8px 10px;border-radius:16px;background:#f14635;color:#fff;text-decoration:none;box-shadow:0 6px 0 #b8261a,0 14px 28px -10px rgba(241,70,53,.8);transition:transform .12s ease,box-shadow .12s ease;-webkit-tap-highlight-color:transparent;animation:kpulse 2.2s ease-in-out infinite}
+  .kbtn:active{transform:translateY(5px);box-shadow:0 1px 0 #b8261a,0 6px 14px -8px rgba(241,70,53,.8);animation:none}
+  .kbtn>*{position:relative;z-index:1}
+  .k-txt b .price-txt{white-space:nowrap}
+  .kbtn::after{content:"";position:absolute;z-index:0;top:0;left:-50%;width:35%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-20deg);animation:kshine 2.6s ease-in-out infinite}
+  @keyframes kshine{0%,55%{left:-50%}100%{left:130%}}
+  @keyframes kpulse{0%,100%{box-shadow:0 6px 0 #b8261a,0 14px 28px -10px rgba(241,70,53,.8)}50%{box-shadow:0 6px 0 #b8261a,0 14px 34px -6px rgba(241,70,53,1),0 0 0 6px rgba(241,70,53,.18)}}
+  .k-logo{flex:none;width:42px;height:42px;border-radius:12px;background:#fff;color:#f14635;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:22px}
+  .k-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+  .k-txt b{font-size:17px;font-weight:800}
+  .k-txt small{margin-top:3px;font-size:13px;font-weight:600;opacity:.92}
+  .k-go{flex:none;width:44px;height:44px;border-radius:50%;background:#fff;color:#f14635;display:grid;place-items:center;animation:knudge 1.2s ease-in-out infinite}
+  @keyframes knudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+  .pay-steps .kbtn{margin-top:10px}
   .paybar small{display:block;text-align:center;margin-top:6px;font-size:12px;color:var(--muted);font-weight:600}
   body.is-paid .paybar{display:none}
   body{padding-bottom:96px}
@@ -332,10 +347,7 @@
 </main>
 
 <div class="paybar" id="paybar">
-  <a href="#" id="paybar-link" data-buy target="_blank" rel="noopener">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
-    Kaspi арқылы ашу · <span class="price-txt">4 490 ₸</span>
-  </a>
+  <a href="#" class="kbtn" id="paybar-link" data-buy target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Сабақтарды ашу · <span class="price-txt">4 490 ₸</span></b><small>👆 Бас, Kaspi арқылы төле</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
   <small>Төлеген соң осы бетке қайтып, «Төледім» бас</small>
 </div>
 
@@ -351,7 +363,7 @@
       </div>
       <ol class="pay-steps">
         <li><i>1</i><div><b>Kaspi арқылы төле</b><br><span style="color:var(--muted);font-size:14px">Батырманы бас, Kaspi ашылады. Төлеп болған соң осы бетке қайт</span>
-          <a class="kaspi" id="kaspi-link" href="#" target="_blank" rel="noopener">Kaspi-де төлеу · <span class="price-txt">4 490 ₸</span></a>
+          <a class="kbtn" id="kaspi-link" href="#" target="_blank" rel="noopener"><span class="k-logo" aria-hidden="true">K</span><span class="k-txt"><b>Kaspi-де төлеу</b><small>👆 Бас, Kaspi ашылады</small></span><span class="k-go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span></a>
           <div class="qr"><img src="kaspi-qr.svg" alt="Kaspi QR"><span>Компьютерден кірсең, телефонмен осы QR-ды сканерле</span></div>
         </div></li>
         <li><i>2</i><div><b>Атың мен WhatsApp нөміріңді жаз</b>
