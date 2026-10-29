@@ -146,9 +146,11 @@
   .facts{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .fact{background:var(--ink);color:#fff;border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;gap:6px}
   .fact b{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;line-height:1.1}
-  .fact:first-child b{color:#8fa0ff}
+  .fact.hot{background:var(--accent)}
+  .fact.hot b{font-size:clamp(22px,7vw,30px);white-space:nowrap}
+  .fact.hot span{color:rgba(255,255,255,.85)}
   .fact span{font-size:13px;line-height:1.35;color:rgba(255,255,255,.72)}
-  @media (min-width:700px){.facts{grid-template-columns:repeat(4,1fr)}}
+  @media (min-width:700px){.facts{grid-template-columns:repeat(3,1fr)}}
 
   /* ---------- Кімге ---------- */
   .p-role{margin-top:2px;font-size:14px;font-weight:700;color:var(--accent)}
@@ -383,8 +385,10 @@
 
   <section class="about" aria-label="@daurendreams кім?">
     <h2 class="sec-title">@daurendreams кім?</h2>
-    <p class="about-lead">Кәсіпкер және кәсіпкерлер мен блогерлердің продюсері. Ол Reels-ті теориядан емес, өз нәтижесінен біледі.</p>
+    <p class="about-lead">Кәсіпкер және кәсіпкерлер мен блогерлердің продюсері. Клиенттеріне барлығы 60 миллионнан астам жазылушы әкелді.</p>
     <div class="facts">
+      <div class="fact hot"><b>+50 млн</b><span>жазылушы — блогерлерге әкелген нәтиже</span></div>
+      <div class="fact hot"><b>+10 млн</b><span>жазылушы — кәсіпкерлерге әкелген нәтиже</span></div>
       <div class="fact"><b>0 → 1 млн+</b><span>Бірнеше адамды бірнеше айда нөлден 1 миллион жазылушыға және одан да жоғары жеткізді</span></div>
       <div class="fact"><b>Дубай</b><span>Дубайда жұмыс істеп, танымал блогерлерді түсірді</span></div>
       <div class="fact"><b>Кәсіпкер</b><span>Бизнесті ішінен біледі: контент сатуға қалай жұмыс істейтінін көрсетеді</span></div>
