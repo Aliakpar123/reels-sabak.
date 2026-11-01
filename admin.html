@@ -123,7 +123,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 const money = n => n.toLocaleString('ru-RU').replace(/ /g, ' ') + ' ₸';
 const when = d => new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 const LABEL = { pending: 'ждёт', paid: 'оплачено', rejected: 'отклонено' };
-const SITE = 'https://aliakpar123.github.io/reels-sabak./';
+const SITE = 'https://dauren-dreams.com/';
 const fmtCode = c => c ? c.replace(/(\d{3})(\d{3})/, '$1 $2') : '';
 const accessMsg = (name, code) => `Сәлем, ${name}! Төлеміңіз расталды ✅\n\nСабақтарды көру үшін сайтқа кіріңіз:\n${SITE}\n\nКіру үшін «Кіру» батырмасын басып, төлем жасаған нөміріңізді және кодты жазыңыз.\nКіру коды: ${fmtCode(code)}`;
 

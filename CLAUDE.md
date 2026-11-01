@@ -1,6 +1,6 @@
 # Reels-уроки Dauren Dreams (лендинг)
 
-Одностраничный сайт на казахском языке с видеоуроками по Reels от Dauren Dreams (имя на сайте везде только ник «@daurendreams» со ссылкой на Instagram, имена «Dauren Dreams» и «Dauren Duisenbek» не используются; Instagram @daurendreams, 105 тыс. подписчиков, Telegram t.me/daurendreamss). Он работает на GitHub Pages: https://aliakpar123.github.io/reels-sabak./
+Одностраничный сайт на казахском языке с видеоуроками по Reels от Dauren Dreams (имя на сайте везде только ник «@daurendreams» со ссылкой на Instagram, имена «Dauren Dreams» и «Dauren Duisenbek» не используются; Instagram @daurendreams, 105 тыс. подписчиков, Telegram t.me/daurendreamss). Он работает на GitHub Pages по адресу https://dauren-dreams.com (домен куплен в Cloudflare, DNS: четыре A-записи @ на IP GitHub Pages и CNAME www → aliakpar123.github.io, все DNS only; в корне репозитория файл `CNAME`). Старый адрес https://aliakpar123.github.io/reels-sabak./ перенаправляет на домен.
 
 Владелец пишет с телефона, по-русски и коротко. Отвечай по-русски, без технических подробностей. Каждую правку доводи до сайта сам, не перекладывай шаги на владельца.
 
@@ -9,6 +9,7 @@
 - `admin.html`: админка автора с паролем. Там список заявок на оплату и кнопки «Подтвердить» и «Отклонить».
 - `img/story-*.jpg`: фото для сторис.
 - `img/dauren-avatar.jpg`: аватарка Даурена для профиля. Вырезана из скриншота, лучше заменить оригиналом. Владелец просил не ставить фото в начало страницы, оставить только аватарку.
+- `CNAME`: домен сайта для GitHub Pages, не удалять.
 - `kaspi-qr.svg`: QR-код, сделанный из ссылки Kaspi Pay.
 - `oferta.html`, `privacy.html`, `terms.html`: страницы документов из подвала.
 - `.github/workflows/deploy.yml`: при каждом push в `main` копирует сайт в ветку `gh-pages`, а GitHub Pages её публикует.
