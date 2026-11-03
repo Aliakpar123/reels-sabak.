@@ -46,6 +46,32 @@
   .o-act{flex-wrap:wrap}
   .code b{color:var(--ink);letter-spacing:.06em}
   .wa.tg{background:#229ed9}
+  .views{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:16px;padding:4px;border-radius:14px;background:var(--surface)}
+  .view{height:42px;border:0;border-radius:10px;background:none;font-weight:800;cursor:pointer;color:var(--muted)}
+  .view.on{background:var(--ink);color:#fff}
+  .period{display:flex;gap:6px;margin-top:16px}
+  .pchip{height:36px;padding:0 14px;border-radius:99px;border:0;background:var(--surface);font-weight:700;font-size:14px;cursor:pointer}
+  .pchip.on{background:var(--accent);color:#fff}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .kpi{background:var(--surface);border-radius:14px;padding:12px}
+  .kpi b{display:block;font-family:'Unbounded',system-ui,sans-serif;font-size:20px;font-variant-numeric:tabular-nums}
+  .kpi span{font-size:12px;color:var(--muted);font-weight:600}
+  .kpi.main{background:var(--accent);color:#fff}.kpi.main span{color:rgba(255,255,255,.8)}
+  .ch-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .chart{margin-top:12px;display:flex;align-items:flex-end;gap:4px;height:140px}
+  .bar{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+  .bar i{display:block;width:100%;max-width:28px;border-radius:6px 6px 2px 2px;background:var(--accent);min-height:2px}
+  .bar.today i{background:var(--ink)}
+  .bar em{font-style:normal;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .bar small{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .frow{margin-top:10px}
+  .frow .fl{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+  .frow .fl span{color:var(--muted);font-weight:500}
+  .frow .fb{margin-top:4px;height:10px;border-radius:99px;background:var(--bg);overflow:hidden}
+  .frow .fb i{display:block;height:100%;background:var(--accent);border-radius:99px}
+  .src{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .src:last-child{border-bottom:0}
+  .src b{font-variant-numeric:tabular-nums}
   .wa{flex:1 1 100%;height:44px;border-radius:10px;background:#25d366;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;text-decoration:none}
   .pill{font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;background:#fef0c7;color:#b54708}
   .pill.paid{background:#d1fadf;color:#067647}
@@ -78,6 +104,34 @@
       </div>
       <button class="link" id="logout" type="button">Выйти</button>
     </div>
+    <div class="views" role="tablist">
+      <button class="view on" data-v="orders" type="button">Заявки</button>
+      <button class="view" data-v="metrics" type="button">Статистика</button>
+    </div>
+
+    <section id="metrics" hidden>
+      <div class="period" role="tablist">
+        <button class="pchip" data-d="1" type="button">Сегодня</button>
+        <button class="pchip on" data-d="7" type="button">7 дней</button>
+        <button class="pchip" data-d="30" type="button">30 дней</button>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="card">
+        <div class="ch-head"><b>Посетители по дням</b><span class="sub" id="ch-sub"></span></div>
+        <div class="chart" id="chart"></div>
+      </div>
+      <div class="card">
+        <b>Воронка</b>
+        <div id="funnel"></div>
+      </div>
+      <div class="card">
+        <b>Откуда пришли</b>
+        <div id="sources"></div>
+      </div>
+      <p class="sub" style="margin-top:12px">Посетитель — один браузер. Один человек с двух телефонов считается дважды. Данные копятся с момента подключения статистики.</p>
+    </section>
+
+    <section id="orders">
     <div class="stats">
       <div class="stat"><b id="s-pending">0</b><span>ждут проверки</span></div>
       <div class="stat"><b id="s-paid">0</b><span>оплатили</span></div>
@@ -90,6 +144,7 @@
       <button class="tab" data-f="all" type="button">Все</button>
     </div>
     <div id="list"></div>
+    </section>
 
     <details>
       <summary>Сменить пароль</summary>
@@ -193,10 +248,51 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   render();
 }));
 
+/* ---------- Статистика ---------- */
+let days = 7;
+const SRC = { direct: 'Прямой заход / ссылка', instagram: 'Instagram', telegram: 'Telegram', whatsapp: 'WhatsApp', tiktok: 'TikTok', youtube: 'YouTube', search: 'Поиск (Google и др.)', facebook: 'Facebook', other: 'Другое' };
+const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+async function loadStats() {
+  let d;
+  try { d = await api('admin_stats', { p_pass: pass, p_days: days }); } catch (e) { return; }
+  const t = d.totals;
+  $('kpis').innerHTML = [
+    ['main', t.visitors, days === 1 ? 'посетителей сегодня' : 'посетителей за ' + days + ' дн.'],
+    ['', t.visits, 'заходов (с повторными)'],
+    ['', t.free_play, 'смотрели бесплатный урок'],
+    ['', t.buy_open, 'открыли окно оплаты'],
+    ['', t.paid, 'оплатили'],
+    ['', money(t.revenue), 'выручка'],
+  ].map(([c, v, l]) => `<div class="kpi ${c}"><b>${v}</b><span>${l}</span></div>`).join('');
+  const max = Math.max(1, ...d.daily.map(x => x.visitors));
+  const last = d.daily.length - 1;
+  $('chart').innerHTML = d.daily.map((x, i) => {
+    const h = Math.round(x.visitors / max * 100);
+    const lbl = x.day.slice(8, 10) + '.' + x.day.slice(5, 7);
+    return `<div class="bar${i === last ? ' today' : ''}" title="${lbl}: ${x.visitors} посетителей, ${x.paid} оплат"><small>${x.visitors || ''}</small><i style="height:${h}%"></i><em>${d.daily.length > 10 && i % 3 && i !== last ? '' : lbl}</em></div>`;
+  }).join('');
+  $('ch-sub').textContent = 'сегодня: ' + t.today_visitors;
+  const steps = [['Зашли на сайт', t.visitors], ['Листали сторис', t.story], ['Смотрели бесплатный урок', t.free_play], ['Открыли окно оплаты', t.buy_open], ['Нажали «Kaspi»', t.kaspi_click], ['Отправили заявку «Төледім»', t.orders], ['Оплата подтверждена', t.paid]];
+  $('funnel').innerHTML = steps.map(([l, v]) => `<div class="frow"><div class="fl">${l}<span><b style="color:var(--ink)">${v}</b> · ${pct(v, t.visitors)}</span></div><div class="fb"><i style="width:${t.visitors ? Math.max(v ? 2 : 0, v / t.visitors * 100) : 0}%"></i></div></div>`).join('');
+  $('sources').innerHTML = d.sources.length ? d.sources.map(x => `<div class="src"><span>${esc(SRC[x.source] || x.source)}</span><b>${x.visitors}</b></div>`).join('') : '<p class="sub" style="margin-top:8px">Пока нет данных</p>';
+}
+document.querySelectorAll('.view').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x === b));
+  $('orders').hidden = b.dataset.v !== 'orders';
+  $('metrics').hidden = b.dataset.v !== 'metrics';
+  $('updated').parentElement.querySelector('h1').textContent = b.dataset.v === 'orders' ? 'Заявки' : 'Статистика';
+  if (b.dataset.v === 'metrics') loadStats();
+}));
+document.querySelectorAll('.pchip').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.pchip').forEach(x => x.classList.toggle('on', x === b));
+  days = +b.dataset.d;
+  loadStats();
+}));
+
 function start() {
   $('login').hidden = true; $('app').hidden = false;
   load();
-  clearInterval(timer); timer = setInterval(load, 15000);
+  clearInterval(timer); timer = setInterval(() => { load(); if (!$('metrics').hidden) loadStats(); }, 15000);
 }
 function logout(msg) {
   pass = ''; try { sessionStorage.removeItem('admin_pass'); } catch (e) {}

@@ -639,6 +639,38 @@ if (CONFIG.authorPhoto) { $('avatar').style.backgroundImage = `url("${CONFIG.aut
 else $('avatar').textContent = (CONFIG.authorName.replace('@','').trim()[0] || 'А').toUpperCase();
 ['cta-text', 'cta2-text'].forEach(id => $(id).textContent = CONFIG.ctaText);
 ['cta', 'cta2', 'wait-contact', 'rej-contact'].forEach(id => $(id).href = CONFIG.contactUrl);
+/* ---------- Статистика (анонимно: случайный id браузера) ---------- */
+const VKEY = 'visitor_id';
+let visitor = store.get(VKEY);
+if (!/^[0-9a-f-]{36}$/i.test(visitor || '')) {
+  visitor = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }));
+  store.set(VKEY, visitor);
+}
+const tracked = new Set();
+function track(event, once = true) {
+  if (once && tracked.has(event)) return;
+  tracked.add(event);
+  api('track', { p_visitor: visitor, p_event: event, p_source: trafficSource() }).catch(() => {});
+}
+function trafficSource() {
+  const q = new URLSearchParams(location.search);
+  const utm = q.get('utm_source') || q.get('src');
+  if (utm) return utm.toLowerCase();
+  const r = document.referrer;
+  if (!r) return 'direct';
+  let h = '';
+  try { h = new URL(r).hostname.replace(/^www\./, ''); } catch (e) { return 'other'; }
+  if (h === location.hostname) return 'direct';
+  if (/instagram|ig\.me/.test(h)) return 'instagram';
+  if (/t\.me|telegram/.test(h)) return 'telegram';
+  if (/whatsapp|wa\.me/.test(h)) return 'whatsapp';
+  if (/tiktok/.test(h)) return 'tiktok';
+  if (/youtube|youtu\.be/.test(h)) return 'youtube';
+  if (/google|yandex|bing/.test(h)) return 'search';
+  if (/facebook|fb\./.test(h)) return 'facebook';
+  return h.slice(0, 40);
+}
+track('visit');
 $('kaspi-link').href = CONFIG.kaspiUrl;
 $('paybar-link').href = CONFIG.kaspiUrl;
 if (CONFIG.phoneLogin) document.querySelectorAll('[data-login]').forEach(el => el.hidden = false);
@@ -729,6 +761,7 @@ function startVideo() {
   f.allowFullscreen = true;
   box.appendChild(f);
   poster.style.display = 'none';
+  if (l.locked === false && !paid) track('free_play');
   watched.add(keyOf(l));
   saveWatched();
   render();
@@ -773,6 +806,7 @@ poster.addEventListener('click', startVideo);
   const vid = j => wrap.children[j] && wrap.children[j].querySelector('video');
   const durOf = j => { const v = vid(j); if (S[j].dur) return S[j].dur * 1000; if (v && v.duration > 0) return Math.min(v.duration, 30) * 1000; return v ? 10000 : DUR; };
   function show(i) {
+    if (i > 0) track('story');
     const pv = vid(cur); if (pv) pv.pause();
     cur = (i + S.length) % S.length;
     const v = vid(cur); if (v) { v.currentTime = 0; v.muted = !sound; v.play().catch(() => {}); }
@@ -831,6 +865,7 @@ let pollTimer = null;
 
 function openSheet() {
   if (paid) return;
+  track('buy_open');
   sheet.hidden = false;
   document.body.style.overflow = 'hidden';
   if (token) checkStatus(true); else show('step-pay');
@@ -840,6 +875,7 @@ function closeSheet() {
   document.body.style.overflow = '';
 }
 document.addEventListener('click', e => {
+  if (e.target.closest('#kaspi-link, #paybar-link')) track('kaspi_click');
   if (e.target.closest('[data-buy]')) openSheet();
   if (e.target.closest('[data-login]')) openLogin();
   if (e.target.closest('[data-buy-form]')) show('step-pay');
@@ -856,6 +892,7 @@ $('paid-btn').addEventListener('click', async () => {
   $('paid-btn').disabled = true;
   try {
     token = await api('create_order', { p_name: name, p_phone: phone });
+    track('paid_click');
     store.set('order_token', token);
     show('step-wait');
     startPolling();
