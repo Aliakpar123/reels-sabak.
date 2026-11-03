@@ -108,6 +108,9 @@
   .st-slide::before{z-index:1}
   .st-snd{position:absolute;right:12px;top:56px;z-index:4;width:38px;height:38px;border-radius:50%;border:0;background:rgba(11,13,24,.5);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
   .st-dash{display:inline-block;transform:translateY(.12em)}
+  .st-sm .st-big{font-size:clamp(22px,6.6vw,36px)}
+  .st-sm .st-txt{font-size:14px}
+  .st-sm .st-tag{margin-bottom:8px}
   .st-cta{margin-top:14px;align-self:flex-start;height:48px;padding:0 18px;border-radius:14px;border:0;background:#fff;color:#0f1222;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
   .st-hint{position:absolute;right:14px;top:30px;z-index:3;font-size:12px;font-weight:700;opacity:.6}
   .r-bars i.done::after{content:"";display:block;height:100%;background:#fff}
@@ -594,7 +597,7 @@ const CONFIG = {
         { x: 51, y: 41, label: 'Li Auto', price: '25 млн ₸' },   // чёрный Li Auto
         { x: 81, y: 41, label: 'McLaren', price: '130 млн ₸' },   // фиолетовый McLaren
       ] },
-    { photo: 'img/story-mclaren-poster.jpg', pos: '60% 70%', tag: 'McLaren', big: 'Армандар орындалады...', text: 'Мақсат + жүйелі контент. Осы жүйені сабақтарда толық көрсетемін' },
+    { photo: 'img/story-mclaren-poster.jpg', pos: '60% 100%', small: true, tag: 'McLaren', big: 'Армандар орындалады...', text: 'Мақсат + жүйелі контент. Осы жүйені сабақтарда толық көрсетемін' },
     { photo: 'img/story-plane.jpg', pos: '82% center', tag: 'Follow your dreams', big: 'Масштаб', text: 'Жыл сайын мақсаттар үлкейіп, тезірек орындалады' },
     { photo: '', avatar: true, tag: '15 сабақ', big: '<em>1-сабақ</em> тегін', text: 'Миллион қаралым жинайтын контентті қалай түсіретінімді көрсеттім', cta: true },
   ],
@@ -756,7 +759,7 @@ poster.addEventListener('click', startVideo);
   S.forEach((st, i) => {
     bars.appendChild(document.createElement('i'));
     const el = document.createElement('div');
-    el.className = 'st-slide' + (st.cta ? ' has-cta' : '');
+    el.className = 'st-slide' + (st.cta ? ' has-cta' : '') + (st.small ? ' st-sm' : '');
     if (st.photo) { el.style.backgroundImage = `url("${st.photo}")`; if (st.pos) el.style.backgroundPosition = st.pos; }
     else el.style.background = BG[i % BG.length];
     el.innerHTML = (st.video ? `<video class="st-vid" src="${st.video}"${st.photo ? ` poster="${st.photo}"` : ''} muted playsinline loop preload="metadata"></video><button type="button" class="st-snd" data-snd aria-label="Дыбыс"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg></button>` : '') +
