@@ -351,7 +351,7 @@
   <div class="recbar-in">
     <span class="rec"><i></i>REC</span>
     <span class="rec-label">Жабылуына қалды</span>
-    <span class="clock" id="clock">24:00:00</span>
+    <span class="clock" id="clock">03:00:00</span>
     <button type="button" class="rec-login" data-login><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="m10 17 5-5-5-5"/><path d="M15 12H3"/></svg>Кіру</button>
   </div>
 </div>
@@ -368,7 +368,7 @@
       <div class="st-slides" id="st-slides"></div>
       <span class="st-hint" aria-hidden="true">‹ тап ›</span>
     </div>
-    <p class="warn"><b>1-сабақ тегін.</b> 24 сағаттан кейін жабылады, үлгеріп көр!</p>
+    <p class="warn"><b>1-сабақ тегін.</b> <span id="hours-left">3</span> сағаттан кейін жабылады, үлгеріп көр!</p>
   </section>
 
   <section class="profile" aria-label="Автор">
@@ -583,7 +583,7 @@ const CONFIG = {
   contactUrl: 'https://t.me/daurendreamss', // Telegram-канал Даурена
   kaspiUrl: 'https://pay.kaspi.kz/pay/z8ebzhyh', // ссылка Kaspi Pay (QR в kaspi-qr.svg сделан из неё)
   phoneLogin: true,                     // вход по номеру телефона, с которого оплатили
-  accessHours: 24,                      // сколько часов бесплатный урок доступен с первого визита
+  accessHours: 3,                       // сколько часов бесплатный урок доступен с первого визита
   // Сторис наверху. photo — ссылка на фото (фон слайда); если пусто — тёмный фон
   stories: [
     { photo: 'img/story-yacht.jpg', pos: '55% 35%', tag: '@daurendreams', big: 'Топ-продюсер', text: 'Кәсіпкерлер мен блогерлерге контент арқылы табыс алып келуді үйретемін' },
@@ -996,8 +996,9 @@ loadLessons().then(() => {
   }
 });
 
-/* Таймер: алғашқы кіруден бастап 24 сағат (браузерде сақталады) */
-const KEY = 'lesson_deadline_v1';
+/* Таймер: алғашқы кіруден бастап CONFIG.accessHours сағат (браузерде сақталады) */
+const KEY = 'lesson_deadline_v2';
+$('hours-left').textContent = CONFIG.accessHours;
 let deadline = Number(store.get(KEY));
 if (!deadline) {
   deadline = Date.now() + CONFIG.accessHours * 3600e3;
