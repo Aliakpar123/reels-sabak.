@@ -583,6 +583,8 @@ const CONFIG = {
   contactUrl: 'https://t.me/daurendreamss', // Telegram-канал Даурена
   kaspiUrl: 'https://pay.kaspi.kz/pay/z8ebzhyh', // ссылка Kaspi Pay (QR в kaspi-qr.svg сделан из неё)
   phoneLogin: true,                     // вход по номеру телефона, с которого оплатили
+  fallbackFreeId: 'tCkyQO2QImQ',      // бесплатный урок, если база недоступна
+  fallbackCount: 15,
   accessHours: 3,                       // сколько часов бесплатный урок доступен с первого визита
   // Сторис наверху. photo — ссылка на фото (фон слайда); если пусто — тёмный фон
   stories: [
@@ -771,8 +773,8 @@ async function loadLessons() {
   try {
     lessons = await api('get_lessons', { p_token: token || null });
   } catch (e) {
-    $('list-note').textContent = 'Жүктелмеді, бетті жаңарт';
-    return;
+    /* База недоступна: показываем бесплатный урок и замки, чтобы сайт продолжал работать */
+    lessons = Array.from({ length: CONFIG.fallbackCount }, (_, i) => ({ n: i + 1, title: (i + 1) + '-сабақ', youtube_id: i === 0 ? CONFIG.fallbackFreeId : null, locked: i !== 0 }));
   }
   paid = lessons.length > 0 && lessons.every(l => !l.locked) && !!token;
   document.body.classList.toggle('is-paid', paid);
@@ -897,7 +899,7 @@ $('paid-btn').addEventListener('click', async () => {
     show('step-wait');
     startPolling();
   } catch (e) {
-    $('pay-err').textContent = 'Жіберілмеді. Интернетті тексеріп, қайта бас';
+    $('pay-err').innerHTML = `Жіберілмеді. Қайта бас немесе <a href="${CONFIG.contactUrl}" target="_blank" rel="noopener">Telegram-ға жаз</a>`;
   } finally {
     $('paid-btn').disabled = false;
   }
